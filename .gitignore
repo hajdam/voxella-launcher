@@ -1,0 +1,9 @@
+.gradle
+.nb-gradle
+.nb-gradle-properties
+build/
+target/
+/release
+*~
+/resources/private/
+minecart-updater.cfg
