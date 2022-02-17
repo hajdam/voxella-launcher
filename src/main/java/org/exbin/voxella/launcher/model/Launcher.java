@@ -20,8 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /**
  * Launcher model.
  *
- * @version 0.1.0 2022/02/15
- * @author ExBin Project (http://exbin.org)
+ * @author Voxella Project
  */
 @ParametersAreNonnullByDefault
 public class Launcher {
@@ -32,8 +31,8 @@ public class Launcher {
     public void performUpdate() {
 
     }
-    
+
     public void save() {
-        
+
     }
 }

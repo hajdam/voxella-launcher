@@ -15,19 +15,21 @@
  */
 package org.exbin.voxella.launcher;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
 import org.exbin.voxella.launcher.model.Launcher;
 
 /**
  * Voxella Launcher main window.
  *
- * @version 0.1.0 2022/02/16
- * @author ExBin Project (http://exbin.org)
+ * @author Voxella Project
  */
 @ParametersAreNonnullByDefault
 public class Main {
@@ -36,6 +38,14 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
+
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
+        }
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             JFrame applicationFrame = new JFrame();
@@ -44,8 +54,11 @@ public class Main {
             final Launcher launcher = new Launcher();
             final LauncherPanel mainPanel = new LauncherPanel();
 
-//            applicationFrame.setTitle(mainPanel.getFrameTitle()); // NOI18N
-//            applicationFrame.setIconImage(new javax.swing.ImageIcon(getClass().getResource(mainPanel.getFrameIconPath())).getImage());
+            applicationFrame.setTitle(resourceBundle.getString("Application.title"));
+            String iconPath = resourceBundle.getString("Application.icon");
+            if (iconPath != null) {
+                applicationFrame.setIconImage(new javax.swing.ImageIcon(launcher.getClass().getResource(iconPath)).getImage());
+            }
             applicationFrame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {

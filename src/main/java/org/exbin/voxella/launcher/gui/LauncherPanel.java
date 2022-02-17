@@ -16,6 +16,7 @@
 package org.exbin.voxella.launcher.gui;
 
 import java.util.ResourceBundle;
+import javax.swing.JPanel;
 
 /**
  * Main launcher panel.
@@ -32,7 +33,9 @@ public class LauncherPanel extends javax.swing.JPanel {
     }
 
     private void init() {
-
+        tabbedPane.addTab(resourceBundle.getString("gamesTab.title"), null, new JPanel(), resourceBundle.getString("gamesTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("newsTab.title"), null, new JPanel(), resourceBundle.getString("newsTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), null, new JPanel(), resourceBundle.getString("aboutTab.toolTip"));
     }
 
     /**
@@ -44,19 +47,39 @@ public class LauncherPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        statusPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        tabbedPane = new javax.swing.JTabbedPane();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setText("User:");
+
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(699, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        add(statusPanel, java.awt.BorderLayout.PAGE_END);
+        add(tabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel statusPanel;
+    private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }
