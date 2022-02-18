@@ -101,10 +101,34 @@ jar {
     }
 }
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': mainClass
+    }
+
+    archiveBaseName = 'voxella-launcher-fat'
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+//import proguard.gradle.*
+//
+//task proguardJar(type: proguard.gradle.ProGuardTask) {
+//     libraryjars "${System.properties['java.home']}/jre/lib/rt.jar"
+//     injars "build/libs/bined-editor-basic-standalone-${version}.jar"
+//     outjars "build/libs/bined-editor-basic-proguard-${version}.jar"
+//}
+//proguardJar.dependsOn fatJar
+
+build.dependsOn fatJar
+
 distributions {
     main {
         contents {
-            
+            into('') {
+                from project.jar.archivePath
+                include '*'
+            }
         }
     }
 }

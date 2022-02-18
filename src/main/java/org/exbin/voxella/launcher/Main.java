@@ -23,7 +23,9 @@ import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import org.exbin.voxella.launcher.gui.AboutPanel;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
+import org.exbin.voxella.launcher.gui.UserStatusPanel;
 import org.exbin.voxella.launcher.model.Launcher;
 
 /**
@@ -53,6 +55,19 @@ public class Main {
 
             final Launcher launcher = new Launcher();
             final LauncherPanel mainPanel = new LauncherPanel();
+
+            UserStatusPanel userStatusPanel = new UserStatusPanel();
+                    
+            AboutPanel aboutPanel = new AboutPanel();
+            AboutPanel.AboutInfo aboutInfo = new AboutPanel.AboutInfo();
+            aboutInfo.name = resourceBundle.getString("Application.title");
+            aboutInfo.version = resourceBundle.getString("Application.version");
+            aboutInfo.license = resourceBundle.getString("Application.license");
+            aboutInfo.vendor = resourceBundle.getString("Application.vendor");
+            aboutInfo.homepage = resourceBundle.getString("Application.homepage");
+            aboutPanel.setAboutInfo(aboutInfo);
+            mainPanel.setAboutComponent(aboutPanel);
+            mainPanel.setStatusPanel(userStatusPanel);
 
             applicationFrame.setTitle(resourceBundle.getString("Application.title"));
             String iconPath = resourceBundle.getString("Application.icon");

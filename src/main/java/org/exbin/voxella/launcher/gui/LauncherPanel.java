@@ -15,7 +15,13 @@
  */
 package org.exbin.voxella.launcher.gui;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -23,9 +29,14 @@ import javax.swing.JPanel;
  *
  * @author Voxella Project
  */
+@ParametersAreNonnullByDefault
 public class LauncherPanel extends javax.swing.JPanel {
 
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/LauncherPanel");
+    private final List<JComponent> tabs = new ArrayList<>();
+    private final List<JPanel> tabWrappers = new ArrayList<>();
+    private int activeTab = -1;
+    private JComponent statusPanel;
 
     public LauncherPanel() {
         initComponents();
@@ -33,9 +44,30 @@ public class LauncherPanel extends javax.swing.JPanel {
     }
 
     private void init() {
-        tabbedPane.addTab(resourceBundle.getString("gamesTab.title"), null, new JPanel(), resourceBundle.getString("gamesTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("newsTab.title"), null, new JPanel(), resourceBundle.getString("newsTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), null, new JPanel(), resourceBundle.getString("aboutTab.toolTip"));
+        tabs.add(new JLabel("Games"));
+        tabs.add(new JLabel("Browse"));
+        tabs.add(new JLabel("News"));
+        tabs.add(null);
+
+        for (JComponent tab : tabs) {
+            tabWrappers.add(new JPanel(new BorderLayout()));
+        }
+
+        tabbedPane.addChangeListener((e) -> {
+            if (activeTab >= 0) {
+                tabWrappers.get(activeTab).remove(tabs.get(activeTab));
+            }
+            activeTab = tabbedPane.getSelectedIndex();
+            tabWrappers.get(activeTab).add(tabs.get(activeTab));
+        });
+        tabbedPane.addTab(resourceBundle.getString("gamesTab.title"), null, tabWrappers.get(0), resourceBundle.getString("gamesTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("browseTab.title"), null, tabWrappers.get(1), resourceBundle.getString("browseTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("newsTab.title"), null, tabWrappers.get(2), resourceBundle.getString("newsTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), null, tabWrappers.get(3), resourceBundle.getString("aboutTab.toolTip"));
+    }
+
+    public void setAboutComponent(JComponent component) {
+        tabs.set(3, component);
     }
 
     /**
@@ -47,39 +79,32 @@ public class LauncherPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        statusPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        statusWrapperPanel = new javax.swing.JPanel();
+        headerSeparator = new javax.swing.JSeparator();
         tabbedPane = new javax.swing.JTabbedPane();
 
         setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("User:");
+        statusWrapperPanel.setLayout(new java.awt.BorderLayout());
+        statusWrapperPanel.add(headerSeparator, java.awt.BorderLayout.NORTH);
 
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(699, Short.MAX_VALUE))
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        add(statusPanel, java.awt.BorderLayout.PAGE_END);
+        add(statusWrapperPanel, java.awt.BorderLayout.PAGE_END);
         add(tabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel statusPanel;
+    private javax.swing.JSeparator headerSeparator;
+    private javax.swing.JPanel statusWrapperPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
+
+    public void setStatusPanel(JComponent statusPanel) {
+        if (this.statusPanel != null) {
+            statusWrapperPanel.remove(this.statusPanel);
+        }
+        this.statusPanel = statusPanel;
+        statusWrapperPanel.add(statusPanel);
+        statusWrapperPanel.revalidate();
+    }
 }
