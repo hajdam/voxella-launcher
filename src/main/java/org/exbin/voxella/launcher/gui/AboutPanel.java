@@ -218,6 +218,8 @@ public class AboutPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_appHomepageLabelMouseClicked
 
     public void setAboutInfo(AboutInfo aboutInfo) {
+        appTitleLabel.setText(aboutInfo.title);
+        appDescLabel.setText(aboutInfo.description);
         nameTextField.setText(aboutInfo.name);
         versionTextField.setText(aboutInfo.version);
         vendorTextField.setText(aboutInfo.vendor);
@@ -241,6 +243,8 @@ public class AboutPanel extends javax.swing.JPanel {
 
     public static class AboutInfo {
 
+        public String title;
+        public String description;
         public String name;
         public String version;
         public String vendor;

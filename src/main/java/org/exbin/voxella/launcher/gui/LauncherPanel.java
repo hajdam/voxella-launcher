@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +34,7 @@ import javax.swing.JPanel;
 public class LauncherPanel extends javax.swing.JPanel {
 
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/LauncherPanel");
-    private final List<JComponent> tabs = new ArrayList<>();
+    private final JComponent[] tabs = new JComponent[4];
     private final List<JPanel> tabWrappers = new ArrayList<>();
     private int activeTab = -1;
     private JComponent statusPanel;
@@ -44,10 +45,8 @@ public class LauncherPanel extends javax.swing.JPanel {
     }
 
     private void init() {
-        tabs.add(new JLabel("Games"));
-        tabs.add(new JLabel("Browse"));
-        tabs.add(new JLabel("News"));
-        tabs.add(null);
+        tabs[1] = new JLabel("Browse");
+        tabs[2] = new JLabel("News");
 
         for (JComponent tab : tabs) {
             tabWrappers.add(new JPanel(new BorderLayout()));
@@ -55,19 +54,29 @@ public class LauncherPanel extends javax.swing.JPanel {
 
         tabbedPane.addChangeListener((e) -> {
             if (activeTab >= 0) {
-                tabWrappers.get(activeTab).remove(tabs.get(activeTab));
+                tabWrappers.get(activeTab).remove(tabs[activeTab]);
             }
             activeTab = tabbedPane.getSelectedIndex();
-            tabWrappers.get(activeTab).add(tabs.get(activeTab));
+            JComponent tab = tabs[activeTab];
+            if (tab != null) {
+                tabWrappers.get(activeTab).add(tab);
+            }
         });
-        tabbedPane.addTab(resourceBundle.getString("gamesTab.title"), null, tabWrappers.get(0), resourceBundle.getString("gamesTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("browseTab.title"), null, tabWrappers.get(1), resourceBundle.getString("browseTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("newsTab.title"), null, tabWrappers.get(2), resourceBundle.getString("newsTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), null, tabWrappers.get(3), resourceBundle.getString("aboutTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("gamesTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("gamesTab.icon"))), tabWrappers.get(0), resourceBundle.getString("gamesTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("browseTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("browseTab.icon"))), tabWrappers.get(1), resourceBundle.getString("browseTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("newsTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("newsTab.icon"))), tabWrappers.get(2), resourceBundle.getString("newsTab.toolTip"));
+        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("aboutTab.icon"))), tabWrappers.get(3), resourceBundle.getString("aboutTab.toolTip"));
+    }
+
+    public void setGameListComponent(JComponent component) {
+        tabs[0] = component;
+        if (activeTab == 0) {
+            tabWrappers.get(activeTab).add(tabs[activeTab]);
+        }
     }
 
     public void setAboutComponent(JComponent component) {
-        tabs.set(3, component);
+        tabs[3] = component;
     }
 
     /**
@@ -89,6 +98,8 @@ public class LauncherPanel extends javax.swing.JPanel {
         statusWrapperPanel.add(headerSeparator, java.awt.BorderLayout.NORTH);
 
         add(statusWrapperPanel, java.awt.BorderLayout.PAGE_END);
+
+        tabbedPane.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         add(tabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 

@@ -19,11 +19,14 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import org.exbin.voxella.launcher.gui.AboutPanel;
+import org.exbin.voxella.launcher.gui.GameListPanel;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
 import org.exbin.voxella.launcher.gui.UserStatusPanel;
 import org.exbin.voxella.launcher.model.Launcher;
@@ -40,6 +43,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        File currentDir;
+        try {
+            currentDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        } catch (URISyntaxException ex) {
+            currentDir = new File("");
+        }
+
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
 
         try {
@@ -57,15 +67,21 @@ public class Main {
             final LauncherPanel mainPanel = new LauncherPanel();
 
             UserStatusPanel userStatusPanel = new UserStatusPanel();
-                    
+
+            GameListPanel gameListPanel = new GameListPanel();
+
             AboutPanel aboutPanel = new AboutPanel();
             AboutPanel.AboutInfo aboutInfo = new AboutPanel.AboutInfo();
+            aboutInfo.title = resourceBundle.getString("Application.title");
+            aboutInfo.description = resourceBundle.getString("Application.description");
             aboutInfo.name = resourceBundle.getString("Application.title");
             aboutInfo.version = resourceBundle.getString("Application.version");
             aboutInfo.license = resourceBundle.getString("Application.license");
             aboutInfo.vendor = resourceBundle.getString("Application.vendor");
             aboutInfo.homepage = resourceBundle.getString("Application.homepage");
             aboutPanel.setAboutInfo(aboutInfo);
+
+            mainPanel.setGameListComponent(gameListPanel);
             mainPanel.setAboutComponent(aboutPanel);
             mainPanel.setStatusPanel(userStatusPanel);
 
