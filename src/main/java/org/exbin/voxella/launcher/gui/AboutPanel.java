@@ -15,6 +15,7 @@
  */
 package org.exbin.voxella.launcher.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
@@ -225,6 +226,12 @@ public class AboutPanel extends javax.swing.JPanel {
         vendorTextField.setText(aboutInfo.vendor);
         licenseTextField.setText(aboutInfo.license);
         appHomepageLabel.setText(aboutInfo.homepage);
+
+        if (aboutInfo.aboutImage != null) {
+            JLabel imageLabel = new JLabel();
+            imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource(aboutInfo.aboutImage)));
+            aboutHeaderPanel.add(imageLabel, BorderLayout.WEST);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -250,5 +257,6 @@ public class AboutPanel extends javax.swing.JPanel {
         public String vendor;
         public String license;
         public String homepage;
+        public String aboutImage;
     }
 }

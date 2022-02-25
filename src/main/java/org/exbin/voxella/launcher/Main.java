@@ -79,6 +79,7 @@ public class Main {
             aboutInfo.license = resourceBundle.getString("Application.license");
             aboutInfo.vendor = resourceBundle.getString("Application.vendor");
             aboutInfo.homepage = resourceBundle.getString("Application.homepage");
+            aboutInfo.aboutImage = resourceBundle.getString("Application.aboutImage");
             aboutPanel.setAboutInfo(aboutInfo);
 
             mainPanel.setGameListComponent(gameListPanel);
