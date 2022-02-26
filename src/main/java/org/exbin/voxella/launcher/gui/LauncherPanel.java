@@ -37,7 +37,8 @@ public class LauncherPanel extends javax.swing.JPanel {
     private final JComponent[] tabs = new JComponent[4];
     private final List<JPanel> tabWrappers = new ArrayList<>();
     private int activeTab = -1;
-    private JComponent statusPanel;
+    private JComponent userStatusPanel;
+    private JComponent progressStatusPanel;
 
     public LauncherPanel() {
         initComponents();
@@ -46,7 +47,6 @@ public class LauncherPanel extends javax.swing.JPanel {
 
     private void init() {
         tabs[1] = new JLabel("Browse");
-        tabs[2] = new JLabel("News");
 
         for (JComponent tab : tabs) {
             tabWrappers.add(new JPanel(new BorderLayout()));
@@ -62,10 +62,15 @@ public class LauncherPanel extends javax.swing.JPanel {
                 tabWrappers.get(activeTab).add(tab);
             }
         });
-        tabbedPane.addTab(resourceBundle.getString("gamesTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("gamesTab.icon"))), tabWrappers.get(0), resourceBundle.getString("gamesTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("browseTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("browseTab.icon"))), tabWrappers.get(1), resourceBundle.getString("browseTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("newsTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("newsTab.icon"))), tabWrappers.get(2), resourceBundle.getString("newsTab.toolTip"));
-        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), new ImageIcon(getClass().getResource(resourceBundle.getString("aboutTab.icon"))), tabWrappers.get(3), resourceBundle.getString("aboutTab.toolTip"));
+        addTab("gamesTab", tabWrappers.get(0));
+        addTab("browseTab", tabWrappers.get(1));
+        addTab("newsTab", tabWrappers.get(2));
+        addTab("optionsTab", tabWrappers.get(3));
+        tabbedPane.setTabComponentAt(0, new TabComponent(tabbedPane, 0));
+    }
+
+    private void addTab(String tabCode, JComponent component) {
+        tabbedPane.addTab(resourceBundle.getString(tabCode + ".title"), new ImageIcon(getClass().getResource(resourceBundle.getString(tabCode + ".icon"))), component, resourceBundle.getString(tabCode + ".toolTip"));
     }
 
     public void setGameListComponent(JComponent component) {
@@ -75,7 +80,11 @@ public class LauncherPanel extends javax.swing.JPanel {
         }
     }
 
-    public void setAboutComponent(JComponent component) {
+    public void setNewsComponent(JComponent component) {
+        tabs[2] = component;
+    }
+
+    public void setOptionsComponent(JComponent component) {
         tabs[3] = component;
     }
 
@@ -110,12 +119,21 @@ public class LauncherPanel extends javax.swing.JPanel {
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 
-    public void setStatusPanel(JComponent statusPanel) {
-        if (this.statusPanel != null) {
-            statusWrapperPanel.remove(this.statusPanel);
+    public void setUserStatusPanel(JComponent statusPanel) {
+        if (this.userStatusPanel != null) {
+            statusWrapperPanel.remove(this.userStatusPanel);
         }
-        this.statusPanel = statusPanel;
-        statusWrapperPanel.add(statusPanel);
+        this.userStatusPanel = statusPanel;
+        statusWrapperPanel.add(statusPanel, BorderLayout.WEST);
+        statusWrapperPanel.revalidate();
+    }
+
+    public void setProgressStatusPanel(JComponent statusPanel) {
+        if (this.progressStatusPanel != null) {
+            statusWrapperPanel.remove(this.progressStatusPanel);
+        }
+        this.progressStatusPanel = statusPanel;
+        statusWrapperPanel.add(statusPanel, BorderLayout.CENTER);
         statusWrapperPanel.revalidate();
     }
 }

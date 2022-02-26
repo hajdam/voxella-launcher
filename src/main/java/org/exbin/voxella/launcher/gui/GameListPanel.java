@@ -50,6 +50,12 @@ public class GameListPanel extends javax.swing.JPanel {
         filterLabel = new javax.swing.JLabel();
         filterTextField = new javax.swing.JTextField();
         addGameButton = new javax.swing.JButton();
+        gameHeaderPanel = new javax.swing.JPanel();
+        gameInfoPanel = new javax.swing.JPanel();
+        noGameSelectedLabel = new javax.swing.JLabel();
+        launchButton = new javax.swing.JButton();
+        optionsButton = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
 
         gamesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         gamesList.setEnabled(false);
@@ -59,8 +65,29 @@ public class GameListPanel extends javax.swing.JPanel {
 
         filterTextField.setEditable(false);
 
+        addGameButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/edit-add-2.png"))); // NOI18N
         addGameButton.setText(resourceBundle.getString("addGameButton.text")); // NOI18N
         addGameButton.setToolTipText("");
+
+        gameHeaderPanel.setLayout(new java.awt.BorderLayout());
+
+        gameInfoPanel.setLayout(new java.awt.BorderLayout());
+
+        noGameSelectedLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        noGameSelectedLabel.setText(resourceBundle.getString("noGameSelectedLabel.text")); // NOI18N
+        gameInfoPanel.add(noGameSelectedLabel, java.awt.BorderLayout.CENTER);
+
+        launchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/arrow-right.png"))); // NOI18N
+        launchButton.setText(resourceBundle.getString("launchButton.text")); // NOI18N
+        launchButton.setEnabled(false);
+
+        optionsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/configure-3.png"))); // NOI18N
+        optionsButton.setText(resourceBundle.getString("optionsButton.text")); // NOI18N
+        optionsButton.setEnabled(false);
+
+        removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/edit-delete-2.png"))); // NOI18N
+        removeButton.setText(resourceBundle.getString("removeButton.text")); // NOI18N
+        removeButton.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -69,26 +96,48 @@ public class GameListPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(gamesListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(filterLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(filterTextField)))
-                    .addComponent(addGameButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(gamesListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(filterLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(filterTextField)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gameHeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(gameInfoPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addGameButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
+                        .addComponent(removeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(optionsButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(launchButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(filterTextField)
-                    .addComponent(filterLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(filterTextField)
+                            .addComponent(filterLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gamesListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(gameHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gameInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gamesListScrollPane)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addGameButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addGameButton)
+                    .addComponent(launchButton)
+                    .addComponent(optionsButton)
+                    .addComponent(removeButton))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -97,7 +146,13 @@ public class GameListPanel extends javax.swing.JPanel {
     private javax.swing.JButton addGameButton;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterTextField;
+    private javax.swing.JPanel gameHeaderPanel;
+    private javax.swing.JPanel gameInfoPanel;
     private javax.swing.JList<String> gamesList;
     private javax.swing.JScrollPane gamesListScrollPane;
+    private javax.swing.JButton launchButton;
+    private javax.swing.JLabel noGameSelectedLabel;
+    private javax.swing.JButton optionsButton;
+    private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
 }

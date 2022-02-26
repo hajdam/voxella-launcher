@@ -94,13 +94,13 @@ public class AboutPanel extends javax.swing.JPanel {
         aboutHeaderTitlePanel.setLayout(aboutHeaderTitlePanelLayout);
         aboutHeaderTitlePanelLayout.setHorizontalGroup(
             aboutHeaderTitlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 743, Short.MAX_VALUE)
+            .addGap(0, 509, Short.MAX_VALUE)
             .addGroup(aboutHeaderTitlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(aboutHeaderTitlePanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(aboutHeaderTitlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(appDescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE))
                     .addContainerGap()))
         );
         aboutHeaderTitlePanelLayout.setVerticalGroup(
@@ -175,7 +175,7 @@ public class AboutPanel extends javax.swing.JPanel {
                     .addComponent(nameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
+                    .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addComponent(vendorTextField)
                     .addComponent(licenseTextField)
                     .addComponent(appHomepageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -205,7 +205,7 @@ public class AboutPanel extends javax.swing.JPanel {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(homepageLabel)
                     .addComponent(appHomepageLabel))
-                .addContainerGap(393, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         add(mainPanel, java.awt.BorderLayout.CENTER);
