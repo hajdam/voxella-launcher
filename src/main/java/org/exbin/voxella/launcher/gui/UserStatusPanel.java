@@ -49,12 +49,12 @@ public class UserStatusPanel extends javax.swing.JPanel {
         loginButton = new javax.swing.JButton();
         createAccountButton = new javax.swing.JButton();
 
-        userLabel.setText("User:");
+        userLabel.setText(resourceBundle.getString("userLabel.text")); // NOI18N
 
-        loginButton.setText("Login...");
+        loginButton.setText(resourceBundle.getString("loginButton.text")); // NOI18N
         loginButton.setEnabled(false);
 
-        createAccountButton.setText("Create Account...");
+        createAccountButton.setText(resourceBundle.getString("createAccountButton.text")); // NOI18N
         createAccountButton.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

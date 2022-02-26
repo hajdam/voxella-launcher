@@ -30,6 +30,7 @@ import org.exbin.voxella.launcher.gui.GameListPanel;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
 import org.exbin.voxella.launcher.gui.UserStatusPanel;
 import org.exbin.voxella.launcher.model.Launcher;
+import org.exbin.voxella.launcher.utils.ClipboardUtils;
 
 /**
  * Voxella Launcher main window.
@@ -57,6 +58,7 @@ public class Main {
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
         }
+        ClipboardUtils.registerDefaultClipboardPopupMenu();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {

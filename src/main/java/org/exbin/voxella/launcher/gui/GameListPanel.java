@@ -51,11 +51,6 @@ public class GameListPanel extends javax.swing.JPanel {
         filterTextField = new javax.swing.JTextField();
         addGameButton = new javax.swing.JButton();
 
-        gamesList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         gamesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         gamesList.setEnabled(false);
         gamesListScrollPane.setViewportView(gamesList);
@@ -64,7 +59,7 @@ public class GameListPanel extends javax.swing.JPanel {
 
         filterTextField.setEditable(false);
 
-        addGameButton.setText("Add Game...");
+        addGameButton.setText(resourceBundle.getString("addGameButton.text")); // NOI18N
         addGameButton.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
