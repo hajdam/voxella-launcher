@@ -16,10 +16,12 @@
 package org.exbin.voxella.launcher.gui;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
 import java.util.Collection;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
@@ -37,6 +39,7 @@ public class OptionsPanel extends javax.swing.JPanel {
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/OptionsPanel");
 
     private Action aboutAction;
+    private ThemeChangeListener themeChangeListener;
 
     public OptionsPanel() {
         initComponents();
@@ -76,6 +79,20 @@ public class OptionsPanel extends javax.swing.JPanel {
                 return renderer;
             }
         });
+        themeComboBox.addItemListener((e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                ThemeRecord record = (ThemeRecord) e.getItem();
+                if (themeChangeListener != null) {
+                    themeChangeListener.themeChanged(record);
+                }
+            }
+        });
+
+        DefaultComboBoxModel<String> startWithModel = (DefaultComboBoxModel<String>) startWithComboBox.getModel();
+        startWithModel.addElement("Always Games Tab");
+        startWithModel.addElement("Always Browse Tab");
+        startWithModel.addElement("Always News Tab");
+        startWithModel.addElement("Games Tab or Browse if empty");
     }
 
     public void setLanguages(Collection<LanguageRecord> languages) {
@@ -88,6 +105,20 @@ public class OptionsPanel extends javax.swing.JPanel {
         for (ThemeRecord theme : themes) {
             themeComboBox.addItem(theme);
         }
+    }
+    
+    public void setActiveTheme(String themeClass) {
+        for (int i = 0; i < themeComboBox.getItemCount(); i++) {
+            ThemeRecord record = themeComboBox.getItemAt(i);
+            if (themeClass.equals(record.getClassName())) {
+                themeComboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+
+    public void setThemeChangeListener(ThemeChangeListener themeChangeListener) {
+        this.themeChangeListener = themeChangeListener;
     }
 
     public void setAboutAction(Action aboutAction) {
@@ -112,6 +143,9 @@ public class OptionsPanel extends javax.swing.JPanel {
         themeComboBox = new javax.swing.JComboBox<>();
         languageLabel = new javax.swing.JLabel();
         languageComboBox = new javax.swing.JComboBox<>();
+        checkForUpdateCheckBox = new javax.swing.JCheckBox();
+        startWithLabel = new javax.swing.JLabel();
+        startWithComboBox = new javax.swing.JComboBox<>();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -145,6 +179,14 @@ public class OptionsPanel extends javax.swing.JPanel {
 
         languageLabel.setText(resourceBundle.getString("languageLabel.text")); // NOI18N
 
+        checkForUpdateCheckBox.setSelected(true);
+        checkForUpdateCheckBox.setText(resourceBundle.getString("checkForUpdateCheckBox.text")); // NOI18N
+        checkForUpdateCheckBox.setEnabled(false);
+
+        startWithLabel.setText(resourceBundle.getString("startWithLabel.text")); // NOI18N
+
+        startWithComboBox.setEnabled(false);
+
         javax.swing.GroupLayout actionsPanelLayout = new javax.swing.GroupLayout(actionsPanel);
         actionsPanel.setLayout(actionsPanelLayout);
         actionsPanelLayout.setHorizontalGroup(
@@ -162,7 +204,10 @@ public class OptionsPanel extends javax.swing.JPanel {
                             .addComponent(themeLabel)
                             .addComponent(themeComboBox, 0, 341, Short.MAX_VALUE)
                             .addComponent(languageLabel)
-                            .addComponent(languageComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(languageComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(checkForUpdateCheckBox)
+                            .addComponent(startWithLabel)
+                            .addComponent(startWithComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -177,7 +222,13 @@ public class OptionsPanel extends javax.swing.JPanel {
                 .addComponent(languageLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(languageComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 420, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(checkForUpdateCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(startWithLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(startWithComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 326, Short.MAX_VALUE)
                 .addGroup(actionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aboutButton)
                     .addComponent(checkForUpdatesButton))
@@ -194,11 +245,19 @@ public class OptionsPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
     private javax.swing.JPanel actionsPanel;
+    private javax.swing.JCheckBox checkForUpdateCheckBox;
     private javax.swing.JButton checkForUpdatesButton;
     private javax.swing.JComboBox<LanguageRecord> languageComboBox;
     private javax.swing.JLabel languageLabel;
     private javax.swing.JPanel launcherOoptionsPanel;
+    private javax.swing.JComboBox<String> startWithComboBox;
+    private javax.swing.JLabel startWithLabel;
     private javax.swing.JComboBox<ThemeRecord> themeComboBox;
     private javax.swing.JLabel themeLabel;
     // End of variables declaration//GEN-END:variables
+
+    public interface ThemeChangeListener {
+
+        void themeChanged(ThemeRecord themeRecord);
+    }
 }

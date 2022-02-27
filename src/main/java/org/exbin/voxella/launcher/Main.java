@@ -16,25 +16,30 @@
 package org.exbin.voxella.launcher;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.exbin.voxella.launcher.gui.AboutPanel;
 import org.exbin.voxella.launcher.gui.CheckForUpdatePanel;
 import org.exbin.voxella.launcher.gui.GameListPanel;
@@ -45,6 +50,7 @@ import org.exbin.voxella.launcher.gui.UserStatusPanel;
 import org.exbin.voxella.launcher.model.LanguageRecord;
 import org.exbin.voxella.launcher.model.Launcher;
 import org.exbin.voxella.launcher.model.ThemeRecord;
+import org.exbin.voxella.launcher.preferences.Preferences;
 import org.exbin.voxella.launcher.utils.ClipboardUtils;
 import org.exbin.voxella.launcher.utils.WindowUtils;
 import org.exbin.voxella.launcher.utils.gui.CloseControlPanel;
@@ -57,21 +63,25 @@ import org.exbin.voxella.launcher.utils.gui.CloseControlPanel;
 @ParametersAreNonnullByDefault
 public class Main {
 
+    private static final LookAndFeel defaultLaf = UIManager.getLookAndFeel();
+
     private Main() {
     }
 
     public static void main(String[] args) {
-        File executionDir;
-        try {
-            executionDir = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        } catch (URISyntaxException ex) {
-            executionDir = new File("");
-        }
+        final Launcher launcher = new Launcher();
+        final Preferences settings = launcher.loadSettings();
 
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
 
+        String language = settings.get(Launcher.PREFERENCES_LANGUAGE, "");
+
+        final String defaultThemeClass = "com.formdev.flatlaf.FlatDarkLaf";
+        String themeClass = settings.get(Launcher.PREFERENCES_THEME, defaultThemeClass);
+        FlatDarkLaf.installLafInfo();
+        FlatLightLaf.installLafInfo();
         try {
-            UIManager.setLookAndFeel(new FlatDarkLaf());
+            UIManager.setLookAndFeel(themeClass);
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
         }
@@ -79,8 +89,6 @@ public class Main {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            final Launcher launcher = new Launcher();
-
             JFrame applicationFrame = new JFrame();
             applicationFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 //            applicationFrame.setUndecorated(true);
@@ -116,7 +124,9 @@ public class Main {
 
             Set<String> lafClassNames = new HashSet<>();
             List<ThemeRecord> themeRecords = new ArrayList<>();
-            themeRecords.add(new ThemeRecord("", resourceBundle.getString("theme.default")));
+            themeRecords.add(new ThemeRecord(defaultThemeClass, FlatDarkLaf.NAME + resourceBundle.getString("theme.defaultSuffix")));
+            lafClassNames.add(defaultThemeClass);
+            themeRecords.add(new ThemeRecord("", resourceBundle.getString("theme.javaDefault")));
             String crossLafClassName = UIManager.getCrossPlatformLookAndFeelClassName();
             final String metalLafClassName = "javax.swing.plaf.metal.MetalLookAndFeel";
             boolean extraCrossPlatformLAF = !metalLafClassName.equals(crossLafClassName);
@@ -140,6 +150,11 @@ public class Main {
             OptionsPanel optionsPanel = new OptionsPanel();
             optionsPanel.setLanguages(languageRecords);
             optionsPanel.setThemes(themeRecords);
+            optionsPanel.setActiveTheme(themeClass);
+            optionsPanel.setThemeChangeListener((themeRecord) -> {
+                switchLookAndFeel(themeRecord.getClassName(), applicationFrame);
+                settings.put(Launcher.PREFERENCES_THEME, themeRecord.getClassName());
+            });
             optionsPanel.setAboutAction(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -186,7 +201,7 @@ public class Main {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     super.windowClosing(e);
-                    launcher.save();
+                    launcher.saveSettings();
                     System.exit(0);
                 }
             });
@@ -197,5 +212,21 @@ public class Main {
             applicationFrame.setVisible(true);
             launcher.performUpdate();
         });
+    }
+
+    private static void switchLookAndFeel(String className, @Nullable JFrame applicationFrame) {
+        try {
+            if (!className.isEmpty()) {
+                UIManager.setLookAndFeel(className);
+            } else {
+                UIManager.setLookAndFeel(defaultLaf);
+            }
+
+            if (applicationFrame != null) {
+                SwingUtilities.updateComponentTreeUI(applicationFrame);
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(OptionsPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

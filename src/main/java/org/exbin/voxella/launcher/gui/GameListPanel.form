@@ -30,10 +30,7 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="gameHeaderPanel" max="32767" attributes="0"/>
-                          <Component id="gameInfoPanel" alignment="1" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="gameInfoPanel" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="addGameButton" min="-2" max="-2" attributes="0"/>
@@ -62,11 +59,7 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="gamesListScrollPane" pref="430" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="gameHeaderPanel" min="-2" pref="80" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="gameInfoPanel" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="gameInfoPanel" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -122,10 +115,6 @@
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
     </Component>
-    <Container class="javax.swing.JPanel" name="gameHeaderPanel">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
-    </Container>
     <Container class="javax.swing.JPanel" name="gameInfoPanel">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>

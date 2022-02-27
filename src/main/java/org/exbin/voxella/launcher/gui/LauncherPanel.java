@@ -24,6 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * Main launcher panel.
@@ -118,6 +119,21 @@ public class LauncherPanel extends javax.swing.JPanel {
     private javax.swing.JPanel statusWrapperPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        if (tabs != null) {
+            for (JComponent tab : tabs) {
+                SwingUtilities.updateComponentTreeUI(tab);
+            }
+        }
+        if (tabWrappers != null) {
+            for (JPanel tabWrapper : tabWrappers) {
+                SwingUtilities.updateComponentTreeUI(tabWrapper);
+            }
+        }
+    }
 
     public void setUserStatusPanel(JComponent statusPanel) {
         if (this.userStatusPanel != null) {

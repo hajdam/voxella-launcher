@@ -50,7 +50,6 @@ public class GameListPanel extends javax.swing.JPanel {
         filterLabel = new javax.swing.JLabel();
         filterTextField = new javax.swing.JTextField();
         addGameButton = new javax.swing.JButton();
-        gameHeaderPanel = new javax.swing.JPanel();
         gameInfoPanel = new javax.swing.JPanel();
         noGameSelectedLabel = new javax.swing.JLabel();
         launchButton = new javax.swing.JButton();
@@ -68,8 +67,6 @@ public class GameListPanel extends javax.swing.JPanel {
         addGameButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/edit-add-2.png"))); // NOI18N
         addGameButton.setText(resourceBundle.getString("addGameButton.text")); // NOI18N
         addGameButton.setToolTipText("");
-
-        gameHeaderPanel.setLayout(new java.awt.BorderLayout());
 
         gameInfoPanel.setLayout(new java.awt.BorderLayout());
 
@@ -104,9 +101,7 @@ public class GameListPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(filterTextField)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(gameHeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gameInfoPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(gameInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(addGameButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
@@ -128,10 +123,7 @@ public class GameListPanel extends javax.swing.JPanel {
                             .addComponent(filterLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(gamesListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(gameHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gameInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(gameInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addGameButton)
@@ -146,7 +138,6 @@ public class GameListPanel extends javax.swing.JPanel {
     private javax.swing.JButton addGameButton;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterTextField;
-    private javax.swing.JPanel gameHeaderPanel;
     private javax.swing.JPanel gameInfoPanel;
     private javax.swing.JList<String> gamesList;
     private javax.swing.JScrollPane gamesListScrollPane;

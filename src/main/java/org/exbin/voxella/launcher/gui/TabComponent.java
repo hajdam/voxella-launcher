@@ -35,6 +35,7 @@ public class TabComponent extends JComponent {
     private final JTabbedPane tabbedPane;
     private final int index;
     private int changesCount = 1;
+    private final Color changesCountBg = new Color(225, 225, 47);
 
     public TabComponent(JTabbedPane tabbedPane, int index) {
         this.tabbedPane = tabbedPane;
@@ -65,7 +66,7 @@ public class TabComponent extends JComponent {
         g.setFont(titleFont);
         g.drawString(title, 36, 14 + titleFont.getSize() / 2);
         if (changesCount > 0) {
-            g.setColor(Color.YELLOW);
+            g.setColor(changesCountBg);
             g.fillOval(110, 8, 20, 16);
             g.setColor(Color.BLACK);
             Font font = getFont().deriveFont(Font.BOLD);
