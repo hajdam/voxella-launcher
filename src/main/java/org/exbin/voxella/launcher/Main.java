@@ -26,6 +26,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
@@ -75,6 +76,10 @@ public class Main {
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
 
         String language = settings.get(Launcher.PREFERENCES_LANGUAGE, "");
+        if (!language.isEmpty()) {
+            Locale locale = new Locale(language);
+            Locale.setDefault(locale);
+        }
 
         final String defaultThemeClass = "com.formdev.flatlaf.FlatDarkLaf";
         String themeClass = settings.get(Launcher.PREFERENCES_THEME, defaultThemeClass);

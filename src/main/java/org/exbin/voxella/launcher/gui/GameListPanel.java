@@ -72,6 +72,7 @@ public class GameListPanel extends javax.swing.JPanel {
 
         noGameSelectedLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         noGameSelectedLabel.setText(resourceBundle.getString("noGameSelectedLabel.text")); // NOI18N
+        noGameSelectedLabel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         gameInfoPanel.add(noGameSelectedLabel, java.awt.BorderLayout.CENTER);
 
         launchButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/arrow-right.png"))); // NOI18N

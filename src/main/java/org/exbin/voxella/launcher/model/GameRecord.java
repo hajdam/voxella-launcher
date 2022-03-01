@@ -13,39 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.voxella.launcher.gui;
+package org.exbin.voxella.launcher.model;
 
-import java.awt.Graphics;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.JComponent;
+import javax.swing.ImageIcon;
 
 /**
- * List row component with support for update.
+ * Game record.
  *
  * @author Voxella Project
  */
 @ParametersAreNonnullByDefault
-public class GameRowComponent extends JComponent {
+public class GameRecord {
 
     private GameState state = GameState.DEFAULT;
+    private String name;
+    private ImageIcon icon;
 
-    public GameRowComponent() {
+    public GameRecord(String name, ImageIcon icon) {
+        this.name = name;
+        this.icon = icon;
     }
 
+    @Nonnull
     public GameState getState() {
         return state;
     }
 
-    public void setState(GameState state) {
-        this.state = state;
+    @Nonnull
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        // TODO
+    @Nonnull
+    public ImageIcon getIcon() {
+        return icon;
     }
-    
+
     public enum GameState {
         DEFAULT,
         UPDATE_NEEDED,
