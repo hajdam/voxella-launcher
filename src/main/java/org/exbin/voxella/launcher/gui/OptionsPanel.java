@@ -89,10 +89,10 @@ public class OptionsPanel extends javax.swing.JPanel {
         });
 
         DefaultComboBoxModel<String> startWithModel = (DefaultComboBoxModel<String>) startWithComboBox.getModel();
-        startWithModel.addElement("Always Games Tab");
-        startWithModel.addElement("Always Browse Tab");
-        startWithModel.addElement("Always News Tab");
-        startWithModel.addElement("Games Tab or Browse if empty");
+        startWithModel.addElement(resourceBundle.getString("startWith.alwaysGamesTab"));
+        startWithModel.addElement(resourceBundle.getString("startWith.alwaysBrowseTab"));
+        startWithModel.addElement(resourceBundle.getString("startWith.AlwaysNewsTab"));
+        startWithModel.addElement(resourceBundle.getString("startWith.gamesOrBrowse"));
     }
 
     public void setLanguages(Collection<LanguageRecord> languages) {
@@ -106,7 +106,7 @@ public class OptionsPanel extends javax.swing.JPanel {
             themeComboBox.addItem(theme);
         }
     }
-    
+
     public void setActiveTheme(String themeClass) {
         for (int i = 0; i < themeComboBox.getItemCount(); i++) {
             ThemeRecord record = themeComboBox.getItemAt(i);
