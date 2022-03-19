@@ -15,8 +15,17 @@
  */
 package org.exbin.voxella.launcher.gui;
 
+import org.exbin.voxella.launcher.game.terasology.TerasologyGameComponent;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import org.exbin.voxella.launcher.model.GameRecord;
 
 /**
  * Games list panel.
@@ -28,12 +37,50 @@ public class GameListPanel extends javax.swing.JPanel {
 
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/GameListPanel");
 
+    private JComponent activeComponent;
+
     public GameListPanel() {
         initComponents();
         init();
     }
 
     private void init() {
+        activeComponent = noGameSelectedLabel;
+        gamesList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                DefaultListCellRenderer renderer = (DefaultListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                GameRecord record = (GameRecord) value;
+                renderer.setText(record.getName());
+                renderer.setIcon(record.getIcon());
+                return renderer;
+            }
+        });
+        gamesList.addListSelectionListener((event) -> {
+            int index = gamesList.getSelectedIndex();
+
+            JComponent targetComponent;
+            if (index >= 0) {
+                GameRecord record = gamesList.getModel().getElementAt(index);
+                targetComponent = record.getComponent();
+            } else {
+                targetComponent = noGameSelectedLabel;
+            }
+
+            if (activeComponent != targetComponent) {
+                gameInfoPanel.remove(activeComponent);
+                gameInfoPanel.add(targetComponent, BorderLayout.CENTER);
+                activeComponent = targetComponent;
+                gameInfoPanel.revalidate();
+                gameInfoPanel.repaint();
+            }
+        });
+
+        DefaultListModel<GameRecord> gameRecordsModel = new DefaultListModel<>();
+        ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/voxella.png"));
+        GameRecord record = new GameRecord("Test Game", new TerasologyGameComponent(), icon);
+        gameRecordsModel.addElement(record);
+        gamesList.setModel(gameRecordsModel);
     }
 
     /**
@@ -57,7 +104,6 @@ public class GameListPanel extends javax.swing.JPanel {
         removeButton = new javax.swing.JButton();
 
         gamesList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        gamesList.setEnabled(false);
         gamesListScrollPane.setViewportView(gamesList);
 
         filterLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/view-filter.png"))); // NOI18N
@@ -140,7 +186,7 @@ public class GameListPanel extends javax.swing.JPanel {
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterTextField;
     private javax.swing.JPanel gameInfoPanel;
-    private javax.swing.JList<String> gamesList;
+    private javax.swing.JList<GameRecord> gamesList;
     private javax.swing.JScrollPane gamesListScrollPane;
     private javax.swing.JButton launchButton;
     private javax.swing.JLabel noGameSelectedLabel;

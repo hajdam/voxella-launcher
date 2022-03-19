@@ -18,6 +18,7 @@ package org.exbin.voxella.launcher.model;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 
 /**
  * Game record.
@@ -30,9 +31,11 @@ public class GameRecord {
     private GameState state = GameState.DEFAULT;
     private String name;
     private ImageIcon icon;
+    private JComponent component;
 
-    public GameRecord(String name, ImageIcon icon) {
+    public GameRecord(String name, JComponent component, ImageIcon icon) {
         this.name = name;
+        this.component = component;
         this.icon = icon;
     }
 
@@ -49,6 +52,15 @@ public class GameRecord {
     @Nonnull
     public ImageIcon getIcon() {
         return icon;
+    }
+
+    @Nonnull
+    public JComponent getComponent() {
+        return component;
+    }
+
+    public void setComponent(JComponent component) {
+        this.component = component;
     }
 
     public enum GameState {

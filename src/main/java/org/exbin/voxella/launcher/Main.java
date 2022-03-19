@@ -118,7 +118,7 @@ public class Main {
                     ImageIcon icon = null;
                     if (resourceBundle.containsKey(prefix + ".icon")) {
                         String langIconPath = resourceBundle.getString(prefix + ".icon");
-                        icon = new javax.swing.ImageIcon(launcher.getClass().getResource(langIconPath));
+                        icon = new ImageIcon(launcher.getClass().getResource(langIconPath));
                     }
                     languageRecords.add(new LanguageRecord(name, code, alt, icon));
                 } else {

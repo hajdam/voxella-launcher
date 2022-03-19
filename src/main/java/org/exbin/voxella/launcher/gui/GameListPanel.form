@@ -84,10 +84,9 @@
         <Component class="javax.swing.JList" name="gamesList">
           <Properties>
             <Property name="selectionMode" type="int" value="0"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;GameRecord&gt;"/>
           </AuxValues>
         </Component>
       </SubComponents>
