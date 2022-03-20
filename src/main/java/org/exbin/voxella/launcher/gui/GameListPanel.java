@@ -18,13 +18,17 @@ package org.exbin.voxella.launcher.gui;
 import org.exbin.voxella.launcher.game.terasology.TerasologyGameComponent;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.Action;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JList;
+import org.exbin.voxella.launcher.game.terasology.TerasologyGameOptionsComponent;
 import org.exbin.voxella.launcher.model.GameRecord;
 
 /**
@@ -37,6 +41,7 @@ public class GameListPanel extends javax.swing.JPanel {
 
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/GameListPanel");
 
+    private Action optionsAction;
     private JComponent activeComponent;
 
     public GameListPanel() {
@@ -60,8 +65,9 @@ public class GameListPanel extends javax.swing.JPanel {
             int index = gamesList.getSelectedIndex();
 
             JComponent targetComponent;
+            GameRecord record = null;
             if (index >= 0) {
-                GameRecord record = gamesList.getModel().getElementAt(index);
+                record = gamesList.getModel().getElementAt(index);
                 targetComponent = record.getComponent();
             } else {
                 targetComponent = noGameSelectedLabel;
@@ -76,17 +82,27 @@ public class GameListPanel extends javax.swing.JPanel {
 
                 boolean isSelected = index >= 0;
                 launchButton.setEnabled(isSelected);
-                optionsButton.setEnabled(isSelected);
-                removeButton.setEnabled(isSelected);
+                optionsButton.setEnabled(isSelected && record.getOptionsComponent().isPresent());
+//                removeButton.setEnabled(isSelected);
             }
         });
 
         DefaultListModel<GameRecord> gameRecordsModel = new DefaultListModel<>();
         ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/game/terasology/resources/gooey_star_48.png"));
         GameRecord record = new GameRecord("Terasology Test", new TerasologyGameComponent(), icon);
+        record.setOptionsComponent(new TerasologyGameOptionsComponent());
         gameRecordsModel.addElement(record);
         gamesList.setModel(gameRecordsModel);
         gamesList.setSelectedIndex(0);
+    }
+
+    public void setOptionsAction(Action optionsAction) {
+        this.optionsAction = optionsAction;
+    }
+
+    @Nonnull
+    public GameRecord getSelectedGame() {
+        return Objects.requireNonNull(gamesList.getSelectedValue());
     }
 
     /**
@@ -134,6 +150,11 @@ public class GameListPanel extends javax.swing.JPanel {
         optionsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/configure-3.png"))); // NOI18N
         optionsButton.setText(resourceBundle.getString("optionsButton.text")); // NOI18N
         optionsButton.setEnabled(false);
+        optionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optionsButtonActionPerformed(evt);
+            }
+        });
 
         removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/edit-delete-2.png"))); // NOI18N
         removeButton.setText(resourceBundle.getString("removeButton.text")); // NOI18N
@@ -186,6 +207,10 @@ public class GameListPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void optionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsButtonActionPerformed
+        optionsAction.actionPerformed(evt);
+    }//GEN-LAST:event_optionsButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGameButton;

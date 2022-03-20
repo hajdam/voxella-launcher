@@ -305,7 +305,7 @@ public class WindowUtils {
      * @return panel
      */
     @Nonnull
-    public static JPanel createDialogPanel(JPanel mainPanel, JPanel controlPanel) {
+    public static JPanel createDialogPanel(@Nonnull JComponent mainPanel, @Nonnull JComponent controlPanel) {
         JPanel dialogPanel;
         if (controlPanel instanceof OkCancelService) {
             dialogPanel = new DialogPanel((OkCancelService) controlPanel);

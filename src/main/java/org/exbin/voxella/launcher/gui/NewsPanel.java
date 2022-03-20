@@ -37,8 +37,14 @@ public class NewsPanel extends javax.swing.JPanel {
 
     private void init() {
         editorPane.addHyperlinkListener((HyperlinkEvent e) -> {
-            BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+            }
         });
+        editorPane.setContentType("text/html");
+        editorPane.setText("<html><body><h1>This section is under development</h1></body></html>");
+        remove(loadingLabel);
+        add(scrollPane);
     }
 
     /**

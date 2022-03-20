@@ -37,9 +37,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JViewport;
+import javax.swing.event.HyperlinkEvent;
+import org.exbin.voxella.launcher.model.GameRecord;
 import org.exbin.voxella.launcher.utils.BareBonesBrowserLaunch;
 import org.exbin.voxella.launcher.utils.WindowUtils;
 
@@ -54,10 +57,10 @@ public class TerasologyGameComponent extends JComponent {
     private final String RECOURCE_PREFIX = "org/exbin/voxella/launcher/game/terasology/resources/";
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle(RECOURCE_PREFIX + "TerasologyGameComponent");
 
-    private Image bgImage;
-    private Dimension bgImageSize;
-    private Image logoImage;
-    private Dimension logoImageSize;
+    private final Image bgImage;
+    private final Dimension bgImageSize;
+    private final Image logoImage;
+    private final Dimension logoImageSize;
 
     private final Cursor defaultCursor = Cursor.getDefaultCursor();
     private final Cursor textCursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
@@ -70,6 +73,7 @@ public class TerasologyGameComponent extends JComponent {
     private final String headerUrl;
     private final String headerToolTip;
 
+    private GameRecord gameRecord;
     private AffiliateLink activeLink;
     private JTabbedPane tabbedPane;
 
@@ -114,6 +118,12 @@ public class TerasologyGameComponent extends JComponent {
                 } else if (isInHeader(mouseX, mouseY)) {
                     targetCursor = handCursor;
                     targetToolTip = headerToolTip;
+                } else {
+//                    targetCursor = tabbedPane.getCursor();
+//                    Component component = getComponentAt(mouseX, mouseY);
+//                    if (component != TerasologyGameComponent.this) {
+//                        targetCursor = component.getCursor();
+//                    }
                 }
 
                 if (targetCursor != currentCursor) {
@@ -150,8 +160,6 @@ public class TerasologyGameComponent extends JComponent {
                 tabbedPane.setBounds(10, logoImageSize.height + 20, width - 20, height - 88 - logoImageSize.height);
             }
         });
-
-        setCursor(handCursor);
     }
 
     private void init() {
@@ -162,13 +170,12 @@ public class TerasologyGameComponent extends JComponent {
                 if (g instanceof Graphics2DWrapper) {
                     super.paint(g);
                 } else {
-//                    super.paint(g);
                     TerasologyGameComponent.this.repaint();
                     // TerasologyGameComponent.this.paintImmediately(getBounds());
                 }
             }
         };
-        
+
         aboutText.setEditorKit(JEditorPane.createEditorKitForContentType(""));
         aboutText.setEditable(false);
         aboutText.setContentType("text/html");
@@ -178,31 +185,63 @@ public class TerasologyGameComponent extends JComponent {
                 + "settings in a voxel world. The creators and maintainers are a diverse\n"
                 + "mix of software developers, designers, game testers, graphic artists,\n"
                 + "and musicians. We encourage others to join!</p>\n"
+                + "<p><a href=\"https://terasology.org/about.html\">More...</a></p>\n"
                 + "</body></html>");
         aboutText.setOpaque(false);
-        JScrollPane aboutScrollPane = new JScrollPane(aboutText) {
+        aboutText.addHyperlinkListener((HyperlinkEvent e) -> {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+            }
+        });
+        JScrollPane aboutScrollPane = new JScrollPane() {
             @Override
             public void paint(Graphics g) {
                 if (g instanceof Graphics2DWrapper) {
                     super.paint(g);
                 } else {
-//                    super.paint(g);
                     TerasologyGameComponent.this.repaint();
                     // TerasologyGameComponent.this.paintImmediately(getBounds());
                 }
             }
         };
+        JViewport aboutViewport = new JViewport() {
+            @Override
+            public void paint(Graphics g) {
+                if (g instanceof Graphics2DWrapper) {
+                    super.paint(g);
+                } else {
+                    TerasologyGameComponent.this.repaint();
+                    // TerasologyGameComponent.this.paintImmediately(getBounds());
+                }
+            }
+        };
+        aboutViewport.setView(aboutText);
+        aboutScrollPane.setViewport(aboutViewport);
         aboutScrollPane.setOpaque(false);
-        tabbedPane.addTab("About", aboutScrollPane);
-        JLabel updatesPanel = new JLabel("TEST");
-        tabbedPane.addTab("Updates", updatesPanel);
+        tabbedPane.addTab(resourceBundle.getString("aboutTab.title"), aboutScrollPane);
+        JTextArea updatesPanel = new JTextArea("TODO") {
+            @Override
+            public void paint(Graphics g) {
+                if (g instanceof Graphics2DWrapper) {
+                    super.paint(g);
+                } else {
+                    TerasologyGameComponent.this.repaint();
+                    // TerasologyGameComponent.this.paintImmediately(getBounds());
+                }
+            }
+        };
+        updatesPanel.setEditable(false);
+        tabbedPane.addTab(resourceBundle.getString("updatesTab.title"), updatesPanel);
         tabbedPane.invalidate();
         add(tabbedPane);
+    }
+    
+    public void setGameRecord(GameRecord gameRecord) {
+        this.gameRecord = gameRecord;
     }
 
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
         Dimension size = getSize();
         int affiliateX = getAffiliateLinkRowX();
         int affiliateY = getAffiliateLinkRowY();
@@ -238,11 +277,13 @@ public class TerasologyGameComponent extends JComponent {
         g.drawImage(logoImage, 10, 10, emptyObserver);
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(Font.BOLD));
-        g.drawString("Version: x.y", size.width - 120, 100);
+        String versionString = "Version: " + (gameRecord != null ? gameRecord.getVersion() : "unknown");
+        g.drawString(versionString, size.width - 145, 100);
 
 //        g.translate(10, logoImageSize.height + 30);
         Graphics gWrapper = getComponentGraphics(g);
-        paintComponents(gWrapper);
+//        paintComponents(gWrapper);
+        super.paint(gWrapper);
 //        tabbedPane.paint(gWrapper);
 //        tabbedPane.paintAll(gWrapper);
     }
@@ -284,7 +325,7 @@ public class TerasologyGameComponent extends JComponent {
 
         return null;
     }
-    
+
     private boolean isInHeader(int posX, int posY) {
         return posX > 10 && posX < logoImageSize.width + 10 && posY > 10 && posY < logoImageSize.height + 10;
     }

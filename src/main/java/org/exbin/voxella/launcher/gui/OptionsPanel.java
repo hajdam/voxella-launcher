@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
@@ -40,6 +41,7 @@ public class OptionsPanel extends javax.swing.JPanel {
 
     private Action aboutAction;
     private ThemeChangeListener themeChangeListener;
+    private LanguageChangeListener languageChangeListener;
 
     public OptionsPanel() {
         initComponents();
@@ -68,6 +70,14 @@ public class OptionsPanel extends javax.swing.JPanel {
                     renderer.setIcon(flag);
                 }
                 return renderer;
+            }
+        });
+        languageComboBox.addItemListener((e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                LanguageRecord record = (LanguageRecord) e.getItem();
+                if (languageChangeListener != null) {
+                    languageChangeListener.languageChanged(record);
+                }
             }
         });
         themeComboBox.setRenderer(new DefaultListCellRenderer() {
@@ -116,9 +126,23 @@ public class OptionsPanel extends javax.swing.JPanel {
             }
         }
     }
+    
+    public void setActiveLanguage(String locale) {
+        for (int i = 0; i < languageComboBox.getItemCount(); i++) {
+            LanguageRecord record = languageComboBox.getItemAt(i);
+            if (locale.equals(record.getLocale())) {
+                languageComboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
 
     public void setThemeChangeListener(ThemeChangeListener themeChangeListener) {
         this.themeChangeListener = themeChangeListener;
+    }
+
+    public void setLanguageChangeListener(LanguageChangeListener languageChangeListener) {
+        this.languageChangeListener = languageChangeListener;
     }
 
     public void setAboutAction(Action aboutAction) {
@@ -137,8 +161,6 @@ public class OptionsPanel extends javax.swing.JPanel {
 
         launcherOoptionsPanel = new javax.swing.JPanel();
         actionsPanel = new javax.swing.JPanel();
-        aboutButton = new javax.swing.JButton();
-        checkForUpdatesButton = new javax.swing.JButton();
         themeLabel = new javax.swing.JLabel();
         themeComboBox = new javax.swing.JComboBox<>();
         languageLabel = new javax.swing.JLabel();
@@ -146,6 +168,9 @@ public class OptionsPanel extends javax.swing.JPanel {
         checkForUpdateCheckBox = new javax.swing.JCheckBox();
         startWithLabel = new javax.swing.JLabel();
         startWithComboBox = new javax.swing.JComboBox<>();
+        checkForUpdatesButton = new javax.swing.JButton();
+        logsButton = new javax.swing.JButton();
+        aboutButton = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -164,17 +189,6 @@ public class OptionsPanel extends javax.swing.JPanel {
 
         add(launcherOoptionsPanel, java.awt.BorderLayout.CENTER);
 
-        aboutButton.setText(resourceBundle.getString("aboutButton.text")); // NOI18N
-        aboutButton.setEnabled(false);
-        aboutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aboutButtonActionPerformed(evt);
-            }
-        });
-
-        checkForUpdatesButton.setText("Check for Updates...");
-        checkForUpdatesButton.setEnabled(false);
-
         themeLabel.setText(resourceBundle.getString("themeLabel.text")); // NOI18N
 
         languageLabel.setText(resourceBundle.getString("languageLabel.text")); // NOI18N
@@ -187,6 +201,20 @@ public class OptionsPanel extends javax.swing.JPanel {
 
         startWithComboBox.setEnabled(false);
 
+        checkForUpdatesButton.setText("Check for Updates");
+        checkForUpdatesButton.setEnabled(false);
+
+        logsButton.setText("Logs...");
+        logsButton.setEnabled(false);
+
+        aboutButton.setText(resourceBundle.getString("aboutButton.text")); // NOI18N
+        aboutButton.setEnabled(false);
+        aboutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout actionsPanelLayout = new javax.swing.GroupLayout(actionsPanel);
         actionsPanel.setLayout(actionsPanelLayout);
         actionsPanelLayout.setHorizontalGroup(
@@ -195,8 +223,10 @@ public class OptionsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(actionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, actionsPanelLayout.createSequentialGroup()
-                        .addGap(0, 752, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(checkForUpdatesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logsButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(aboutButton))
                     .addGroup(actionsPanelLayout.createSequentialGroup()
@@ -208,7 +238,7 @@ public class OptionsPanel extends javax.swing.JPanel {
                             .addComponent(checkForUpdateCheckBox)
                             .addComponent(startWithLabel)
                             .addComponent(startWithComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 679, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         actionsPanelLayout.setVerticalGroup(
@@ -231,7 +261,8 @@ public class OptionsPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 326, Short.MAX_VALUE)
                 .addGroup(actionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aboutButton)
-                    .addComponent(checkForUpdatesButton))
+                    .addComponent(checkForUpdatesButton)
+                    .addComponent(logsButton))
                 .addContainerGap())
         );
 
@@ -250,6 +281,7 @@ public class OptionsPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<LanguageRecord> languageComboBox;
     private javax.swing.JLabel languageLabel;
     private javax.swing.JPanel launcherOoptionsPanel;
+    private javax.swing.JButton logsButton;
     private javax.swing.JComboBox<String> startWithComboBox;
     private javax.swing.JLabel startWithLabel;
     private javax.swing.JComboBox<ThemeRecord> themeComboBox;
@@ -258,6 +290,11 @@ public class OptionsPanel extends javax.swing.JPanel {
 
     public interface ThemeChangeListener {
 
-        void themeChanged(ThemeRecord themeRecord);
+        void themeChanged(@Nonnull ThemeRecord themeRecord);
+    }
+
+    public interface LanguageChangeListener {
+
+        void languageChanged(@Nonnull LanguageRecord languageRecord);
     }
 }

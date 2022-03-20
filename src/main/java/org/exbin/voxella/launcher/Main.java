@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
@@ -48,6 +49,7 @@ import org.exbin.voxella.launcher.gui.LauncherPanel;
 import org.exbin.voxella.launcher.gui.NewsPanel;
 import org.exbin.voxella.launcher.gui.OptionsPanel;
 import org.exbin.voxella.launcher.gui.UserStatusPanel;
+import org.exbin.voxella.launcher.model.GameRecord;
 import org.exbin.voxella.launcher.model.LanguageRecord;
 import org.exbin.voxella.launcher.model.Launcher;
 import org.exbin.voxella.launcher.model.ThemeRecord;
@@ -103,16 +105,34 @@ public class Main {
             final LauncherPanel mainPanel = new LauncherPanel();
 
             GameListPanel gameListPanel = new GameListPanel();
+            gameListPanel.setOptionsAction(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    GameRecord gameRecord = gameListPanel.getSelectedGame();
+                    JComponent optionsPanel = gameRecord.getOptionsComponent().get();
+
+                    CloseControlPanel controlPanel = new CloseControlPanel();
+                    JPanel dialogPanel = WindowUtils.createDialogPanel(optionsPanel, controlPanel);
+                    final WindowUtils.DialogWrapper dialog = WindowUtils.createDialog(dialogPanel, applicationFrame, resourceBundle.getString("optionsDialog.title"), Dialog.ModalityType.APPLICATION_MODAL);
+                    controlPanel.setHandler(dialog::close);
+                    dialog.center(applicationFrame);
+                    if (applicationIcon != null) {
+                        dialog.getWindow().setIconImage(applicationIcon);
+                    }
+                    dialog.show();
+                }
+            });
 
             NewsPanel newsPanel = new NewsPanel();
 
             List<LanguageRecord> languageRecords = new ArrayList<>();
-            languageRecords.add(new LanguageRecord(resourceBundle.getString("language.default"), null, null, null));
+            languageRecords.add(new LanguageRecord(resourceBundle.getString("language.default"), "", null, null, null));
             int index = 0;
             do {
                 String prefix = "language" + index;
                 if (resourceBundle.containsKey(prefix + ".name")) {
                     String name = resourceBundle.getString(prefix + ".name");
+                    String locale = resourceBundle.getString(prefix + ".locale");
                     String code = resourceBundle.getString(prefix + ".code");
                     String alt = resourceBundle.containsKey(prefix + ".alt") ? resourceBundle.getString(prefix + ".alt") : null;
                     ImageIcon icon = null;
@@ -120,7 +140,7 @@ public class Main {
                         String langIconPath = resourceBundle.getString(prefix + ".icon");
                         icon = new ImageIcon(launcher.getClass().getResource(langIconPath));
                     }
-                    languageRecords.add(new LanguageRecord(name, code, alt, icon));
+                    languageRecords.add(new LanguageRecord(name, locale, code, alt, icon));
                 } else {
                     break;
                 }
@@ -156,9 +176,13 @@ public class Main {
             optionsPanel.setLanguages(languageRecords);
             optionsPanel.setThemes(themeRecords);
             optionsPanel.setActiveTheme(themeClass);
+            optionsPanel.setActiveLanguage(language);
             optionsPanel.setThemeChangeListener((themeRecord) -> {
                 switchLookAndFeel(themeRecord.getClassName(), applicationFrame);
                 settings.put(Launcher.PREFERENCES_THEME, themeRecord.getClassName());
+            });
+            optionsPanel.setLanguageChangeListener((languageRecord) -> {
+                settings.put(Launcher.PREFERENCES_LANGUAGE, languageRecord.getLocale());
             });
             optionsPanel.setAboutAction(new AbstractAction() {
                 @Override

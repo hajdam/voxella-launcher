@@ -15,6 +15,7 @@
  */
 package org.exbin.voxella.launcher.model;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.ImageIcon;
@@ -27,28 +28,36 @@ import javax.swing.ImageIcon;
 @ParametersAreNonnullByDefault
 public class LanguageRecord {
 
+    private final String name;
+    private final String locale;
     @Nullable
     private final String code;
-    private final String name;
     @Nullable
     private final String alt;
     @Nullable
     private final ImageIcon flag;
 
-    public LanguageRecord(String name, @Nullable String code, @Nullable String alt, @Nullable ImageIcon flag) {
-        this.code = code;
+    public LanguageRecord(String name, String locale, @Nullable String code, @Nullable String alt, @Nullable ImageIcon flag) {
         this.name = name;
+        this.locale = locale;
+        this.code = code;
         this.alt = alt;
         this.flag = flag;
+    }
+
+    @Nonnull
+    public String getName() {
+        return name;
+    }
+
+    @Nonnull
+    public String getLocale() {
+        return locale;
     }
 
     @Nullable
     public String getCode() {
         return code;
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Nullable
