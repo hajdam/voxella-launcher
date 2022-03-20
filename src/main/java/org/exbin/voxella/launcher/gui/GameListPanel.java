@@ -73,14 +73,20 @@ public class GameListPanel extends javax.swing.JPanel {
                 activeComponent = targetComponent;
                 gameInfoPanel.revalidate();
                 gameInfoPanel.repaint();
+
+                boolean isSelected = index >= 0;
+                launchButton.setEnabled(isSelected);
+                optionsButton.setEnabled(isSelected);
+                removeButton.setEnabled(isSelected);
             }
         });
 
         DefaultListModel<GameRecord> gameRecordsModel = new DefaultListModel<>();
-        ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/voxella.png"));
-        GameRecord record = new GameRecord("Test Game", new TerasologyGameComponent(), icon);
+        ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/game/terasology/resources/gooey_star_48.png"));
+        GameRecord record = new GameRecord("Terasology Test", new TerasologyGameComponent(), icon);
         gameRecordsModel.addElement(record);
         gamesList.setModel(gameRecordsModel);
+        gamesList.setSelectedIndex(0);
     }
 
     /**
