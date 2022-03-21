@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import org.exbin.voxella.launcher.api.GameController;
 
 /**
  * Game record.
@@ -34,10 +35,12 @@ public class GameRecord {
     private ImageIcon icon;
     private JComponent component;
     private JComponent optionsComponent = null;
+    private GameController controller;
     private String version = "";
 
-    public GameRecord(String name, JComponent component, ImageIcon icon) {
+    public GameRecord(String name, GameController controller, JComponent component, ImageIcon icon) {
         this.name = name;
+        this.controller = controller;
         this.component = component;
         this.icon = icon;
     }
@@ -55,6 +58,11 @@ public class GameRecord {
     @Nonnull
     public ImageIcon getIcon() {
         return icon;
+    }
+
+    @Nonnull
+    public GameController getController() {
+        return controller;
     }
 
     @Nonnull

@@ -42,6 +42,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.exbin.voxella.launcher.api.GameController;
 import org.exbin.voxella.launcher.gui.AboutPanel;
 import org.exbin.voxella.launcher.gui.CheckForUpdatePanel;
 import org.exbin.voxella.launcher.gui.GameListPanel;
@@ -120,6 +121,14 @@ public class Main {
                         dialog.getWindow().setIconImage(applicationIcon);
                     }
                     dialog.show();
+                }
+            });
+            gameListPanel.setLaunchAction(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    GameRecord gameRecord = gameListPanel.getSelectedGame();
+                    GameController controller = gameRecord.getController();
+                    controller.runGame();
                 }
             });
 

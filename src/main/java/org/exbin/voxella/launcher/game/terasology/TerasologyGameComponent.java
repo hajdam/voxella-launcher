@@ -72,6 +72,7 @@ public class TerasologyGameComponent extends JComponent {
     private final Map<AffiliateLink, String> affiliateUrl = new HashMap<>();
     private final String headerUrl;
     private final String headerToolTip;
+    private String gameVersion;
 
     private GameRecord gameRecord;
     private AffiliateLink activeLink;
@@ -91,6 +92,7 @@ public class TerasologyGameComponent extends JComponent {
         }
         headerUrl = resourceBundle.getString("header.link");
         headerToolTip = resourceBundle.getString("header.toolTip");
+        gameVersion = resourceBundle.getString("version.prefix") + resourceBundle.getString("version.unknown");
 
         addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -238,6 +240,7 @@ public class TerasologyGameComponent extends JComponent {
     
     public void setGameRecord(GameRecord gameRecord) {
         this.gameRecord = gameRecord;
+        gameVersion = resourceBundle.getString("version.prefix") + (gameRecord != null ? gameRecord.getVersion() : resourceBundle.getString("version.unknown"));
     }
 
     @Override
@@ -277,8 +280,7 @@ public class TerasologyGameComponent extends JComponent {
         g.drawImage(logoImage, 10, 10, emptyObserver);
         g.setColor(Color.WHITE);
         g.setFont(g.getFont().deriveFont(Font.BOLD));
-        String versionString = "Version: " + (gameRecord != null ? gameRecord.getVersion() : "unknown");
-        g.drawString(versionString, size.width - 145, 100);
+        g.drawString(gameVersion, size.width - 145, 100);
 
 //        g.translate(10, logoImageSize.height + 30);
         Graphics gWrapper = getComponentGraphics(g);
