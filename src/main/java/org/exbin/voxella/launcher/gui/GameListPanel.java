@@ -19,6 +19,7 @@ import org.exbin.voxella.launcher.game.terasology.TerasologyGameComponent;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,6 +29,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JList;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
 import org.exbin.voxella.launcher.game.terasology.TerasologyGameController;
 import org.exbin.voxella.launcher.game.terasology.TerasologyGameOptionsComponent;
 import org.exbin.voxella.launcher.model.GameRecord;
@@ -109,6 +112,23 @@ public class GameListPanel extends javax.swing.JPanel {
     @Nonnull
     public GameRecord getSelectedGame() {
         return Objects.requireNonNull(gamesList.getSelectedValue());
+    }
+
+    @Override
+    public void updateUI() {
+        super.updateUI();
+
+        if (gamesList != null) {
+            ListModel<GameRecord> model = gamesList.getModel();
+            for (int i = 0; i < model.getSize(); i++) {
+                GameRecord gameRecord = model.getElementAt(i);
+                SwingUtilities.updateComponentTreeUI(gameRecord.getComponent());
+                Optional<JComponent> optionsComponent = gameRecord.getOptionsComponent();
+                if (optionsComponent.isPresent()) {
+                    SwingUtilities.updateComponentTreeUI(optionsComponent.get());
+                }
+            }
+        }
     }
 
     /**

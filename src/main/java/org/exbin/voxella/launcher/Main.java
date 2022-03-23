@@ -73,10 +73,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        final Launcher launcher = new Launcher();
-        final Preferences settings = launcher.loadSettings();
-
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
+        String applicationName = resourceBundle.getString("Application.name");
+        String applicationVersion = resourceBundle.getString("Application.version");
+
+        final Launcher launcher = new Launcher();
+        launcher.startLogging(applicationName, applicationVersion);
+        final Preferences settings = launcher.loadSettings();
 
         String language = settings.get(Launcher.PREFERENCES_LANGUAGE, "");
         if (!language.isEmpty()) {
@@ -200,8 +203,8 @@ public class Main {
                     AboutPanel.AboutInfo aboutInfo = new AboutPanel.AboutInfo();
                     aboutInfo.title = resourceBundle.getString("Application.title");
                     aboutInfo.description = resourceBundle.getString("Application.description");
-                    aboutInfo.name = resourceBundle.getString("Application.title");
-                    aboutInfo.version = resourceBundle.getString("Application.version");
+                    aboutInfo.name = applicationName;
+                    aboutInfo.version = applicationVersion;
                     aboutInfo.license = resourceBundle.getString("Application.license");
                     aboutInfo.vendor = resourceBundle.getString("Application.vendor");
                     aboutInfo.homepage = resourceBundle.getString("Application.homepage");

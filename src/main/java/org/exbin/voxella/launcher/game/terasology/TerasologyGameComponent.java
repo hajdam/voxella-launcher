@@ -26,7 +26,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.ImageObserver;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,50 +94,10 @@ public class TerasologyGameComponent extends JComponent {
         headerToolTip = resourceBundle.getString("header.toolTip");
         gameVersion = resourceBundle.getString("version.prefix") + resourceBundle.getString("version.unknown");
 
-        addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-            }
-
+        addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                Cursor currentCursor = getCursor();
-                String currentToolTip = getToolTipText();
-
-                int mouseX = e.getX();
-                int mouseY = e.getY();
-
-                Cursor targetCursor = defaultCursor;
-                String targetToolTip = null;
-                AffiliateLink targetLink = getActiveAffiate(mouseX, mouseY);
-                if (targetLink != activeLink) {
-                    activeLink = targetLink;
-                    repaint();
-                }
-                if (activeLink != null) {
-                    targetCursor = handCursor;
-                    targetToolTip = affiliateToolTip.get(activeLink);
-                } else if (isInHeader(mouseX, mouseY)) {
-                    targetCursor = handCursor;
-                    targetToolTip = headerToolTip;
-                } else {
-//                    targetCursor = tabbedPane.getCursor();
-//                    Component component = getComponentAt(mouseX, mouseY);
-//                    if (component != TerasologyGameComponent.this) {
-//                        targetCursor = component.getCursor();
-//                    }
-                }
-
-                if (targetCursor != currentCursor) {
-                    setCursor(targetCursor);
-                }
-                if (targetToolTip == null) {
-                    if (currentToolTip != null) {
-                        setToolTipText(targetToolTip);
-                    }
-                } else if (!targetToolTip.equals(currentToolTip)) {
-                    setToolTipText(targetToolTip);
-                }
+                processMousePosition(e);
             }
         });
         addMouseListener(new MouseAdapter() {
@@ -153,6 +113,16 @@ public class TerasologyGameComponent extends JComponent {
                     BareBonesBrowserLaunch.openDesktopURL(headerUrl);
                 }
             }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(null);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                processMousePosition(e);
+            }
         });
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -162,6 +132,46 @@ public class TerasologyGameComponent extends JComponent {
                 tabbedPane.setBounds(10, logoImageSize.height + 20, width - 20, height - 88 - logoImageSize.height);
             }
         });
+    }
+
+    private void processMousePosition(MouseEvent e) {
+        Cursor currentCursor = getCursor();
+        String currentToolTip = getToolTipText();
+
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+
+        Cursor targetCursor = defaultCursor;
+        String targetToolTip = null;
+        AffiliateLink targetLink = getActiveAffiate(mouseX, mouseY);
+        if (targetLink != activeLink) {
+            activeLink = targetLink;
+            repaint();
+        }
+        if (activeLink != null) {
+            targetCursor = handCursor;
+            targetToolTip = affiliateToolTip.get(activeLink);
+        } else if (isInHeader(mouseX, mouseY)) {
+            targetCursor = handCursor;
+            targetToolTip = headerToolTip;
+        } else {
+//                    targetCursor = tabbedPane.getCursor();
+//                    Component component = getComponentAt(mouseX, mouseY);
+//                    if (component != TerasologyGameComponent.this) {
+//                        targetCursor = component.getCursor();
+//                    }
+        }
+
+        if (targetCursor != currentCursor) {
+            setCursor(targetCursor);
+        }
+        if (targetToolTip == null) {
+            if (currentToolTip != null) {
+                setToolTipText(targetToolTip);
+            }
+        } else if (!targetToolTip.equals(currentToolTip)) {
+            setToolTipText(targetToolTip);
+        }
     }
 
     private void init() {
@@ -237,7 +247,7 @@ public class TerasologyGameComponent extends JComponent {
         tabbedPane.invalidate();
         add(tabbedPane);
     }
-    
+
     public void setGameRecord(GameRecord gameRecord) {
         this.gameRecord = gameRecord;
         gameVersion = resourceBundle.getString("version.prefix") + (gameRecord != null ? gameRecord.getVersion() : resourceBundle.getString("version.unknown"));

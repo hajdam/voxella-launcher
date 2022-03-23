@@ -42,7 +42,7 @@ public class NewsPanel extends javax.swing.JPanel {
             }
         });
         editorPane.setContentType("text/html");
-        editorPane.setText("<html><body><h1>This section is under development</h1></body></html>");
+        editorPane.setText("<html><body><strong>Voxella Launcher develompent build</strong><p>This app is under development!</p></body></html>");
         remove(loadingLabel);
         add(scrollPane);
     }

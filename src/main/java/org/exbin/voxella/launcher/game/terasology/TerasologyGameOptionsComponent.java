@@ -18,7 +18,6 @@ package org.exbin.voxella.launcher.game.terasology;
 import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -49,7 +48,7 @@ public class TerasologyGameOptionsComponent extends javax.swing.JPanel {
         for (JavaHeapSize heapSize : JavaHeapSize.values()) {
             switch (heapSize) {
                 case NOT_USED: {
-                    heapSizes.put(heapSize, "Not used");
+                    heapSizes.put(heapSize, resourceBundle.getString("heapSize.notUsed"));
                     break;
                 }
                 default: {
@@ -94,6 +93,8 @@ public class TerasologyGameOptionsComponent extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tabbedPane = new javax.swing.JTabbedPane();
+        mainPanel = new javax.swing.JPanel();
         engineVersionLabel = new javax.swing.JLabel();
         engineVersionComboBox = new javax.swing.JComboBox<>();
         javaRuntimeLabel = new javax.swing.JLabel();
@@ -102,7 +103,7 @@ public class TerasologyGameOptionsComponent extends javax.swing.JPanel {
         initMemoryComboBox = new javax.swing.JComboBox<>();
         maximumMemoryLabel = new javax.swing.JLabel();
         maximumMemoryComboBox = new javax.swing.JComboBox<>();
-        extraOptionsPanel = new javax.swing.JPanel();
+        advancedPanel = new javax.swing.JPanel();
         javaArgsLabel = new javax.swing.JLabel();
         javaArgsScrollPane = new javax.swing.JScrollPane();
         javaArgsTextArea = new javax.swing.JTextArea();
@@ -112,99 +113,40 @@ public class TerasologyGameOptionsComponent extends javax.swing.JPanel {
         loggingLevelLabel = new javax.swing.JLabel();
         loggingLevelComboBox = new javax.swing.JComboBox<>();
 
-        engineVersionLabel.setText("Engine Version");
+        setLayout(new java.awt.BorderLayout());
 
-        javaRuntimeLabel.setText("Java Runtime");
+        engineVersionLabel.setText(resourceBundle.getString("engineVersionLabel.text")); // NOI18N
 
-        initMemoryLabel.setText("Init Game Memory");
+        javaRuntimeLabel.setText(resourceBundle.getString("javaRuntimeLabel.text")); // NOI18N
 
-        maximumMemoryLabel.setText("Maximum Game Memory");
+        initMemoryLabel.setText(resourceBundle.getString("initMemoryLabel.text")); // NOI18N
 
-        extraOptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Advanced Options"));
+        maximumMemoryLabel.setText(resourceBundle.getString("maximumMemoryLabel.text")); // NOI18N
 
-        javaArgsLabel.setText("Java Arguments");
-
-        javaArgsTextArea.setColumns(20);
-        javaArgsTextArea.setRows(5);
-        javaArgsScrollPane.setViewportView(javaArgsTextArea);
-
-        gameArgsLabel.setText("Game Arguments");
-
-        gameArgsTextArea.setColumns(20);
-        gameArgsTextArea.setRows(5);
-        gameArgsScrollPane.setViewportView(gameArgsTextArea);
-
-        loggingLevelLabel.setText("Logging Level");
-
-        loggingLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ERROR", "WARN", "INFO", "DEBUG", "TRACE" }));
-        loggingLevelComboBox.setSelectedIndex(2);
-
-        javax.swing.GroupLayout extraOptionsPanelLayout = new javax.swing.GroupLayout(extraOptionsPanel);
-        extraOptionsPanel.setLayout(extraOptionsPanelLayout);
-        extraOptionsPanelLayout.setHorizontalGroup(
-            extraOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(extraOptionsPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(extraOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(javaArgsScrollPane)
-                    .addComponent(gameArgsScrollPane)
-                    .addGroup(extraOptionsPanelLayout.createSequentialGroup()
-                        .addGroup(extraOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(javaArgsLabel)
-                            .addComponent(gameArgsLabel)
-                            .addComponent(loggingLevelLabel)
-                            .addComponent(loggingLevelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(engineVersionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(javaRuntimeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(engineVersionLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(javaRuntimeLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(maximumMemoryLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(initMemoryLabel, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(initMemoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(maximumMemoryComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 213, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        extraOptionsPanelLayout.setVerticalGroup(
-            extraOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(extraOptionsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(javaArgsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(javaArgsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gameArgsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gameArgsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loggingLevelLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loggingLevelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(extraOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(engineVersionLabel)
-                                    .addComponent(javaRuntimeLabel)
-                                    .addComponent(maximumMemoryLabel))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(engineVersionComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(javaRuntimeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(initMemoryLabel)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(initMemoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(maximumMemoryComboBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 376, Short.MAX_VALUE)))))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(engineVersionLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -221,16 +163,73 @@ public class TerasologyGameOptionsComponent extends javax.swing.JPanel {
                 .addComponent(maximumMemoryLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(maximumMemoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(extraOptionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(89, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab(resourceBundle.getString("mainPanel.tabTitle"), mainPanel); // NOI18N
+
+        javaArgsLabel.setText(resourceBundle.getString("javaArgsLabel.text")); // NOI18N
+
+        javaArgsTextArea.setColumns(20);
+        javaArgsTextArea.setRows(5);
+        javaArgsScrollPane.setViewportView(javaArgsTextArea);
+
+        gameArgsLabel.setText(resourceBundle.getString("gameArgsLabel.text")); // NOI18N
+
+        gameArgsTextArea.setColumns(20);
+        gameArgsTextArea.setRows(5);
+        gameArgsScrollPane.setViewportView(gameArgsTextArea);
+
+        loggingLevelLabel.setText(resourceBundle.getString("loggingLevelLabel.text")); // NOI18N
+
+        loggingLevelComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ERROR", "WARN", "INFO", "DEBUG", "TRACE" }));
+        loggingLevelComboBox.setSelectedIndex(2);
+
+        javax.swing.GroupLayout advancedPanelLayout = new javax.swing.GroupLayout(advancedPanel);
+        advancedPanel.setLayout(advancedPanelLayout);
+        advancedPanelLayout.setHorizontalGroup(
+            advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(advancedPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(advancedPanelLayout.createSequentialGroup()
+                        .addGroup(advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(javaArgsLabel)
+                            .addComponent(gameArgsLabel)
+                            .addComponent(loggingLevelLabel)
+                            .addComponent(loggingLevelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 234, Short.MAX_VALUE))
+                    .addComponent(gameArgsScrollPane)
+                    .addComponent(javaArgsScrollPane, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
+        advancedPanelLayout.setVerticalGroup(
+            advancedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(advancedPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(javaArgsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(javaArgsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(gameArgsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(gameArgsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(loggingLevelLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(loggingLevelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab(resourceBundle.getString("advancedPanel.tabTitle"), advancedPanel); // NOI18N
+
+        add(tabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel advancedPanel;
     private javax.swing.JComboBox<String> engineVersionComboBox;
     private javax.swing.JLabel engineVersionLabel;
-    private javax.swing.JPanel extraOptionsPanel;
     private javax.swing.JLabel gameArgsLabel;
     private javax.swing.JScrollPane gameArgsScrollPane;
     private javax.swing.JTextArea gameArgsTextArea;
@@ -243,7 +242,9 @@ public class TerasologyGameOptionsComponent extends javax.swing.JPanel {
     private javax.swing.JLabel javaRuntimeLabel;
     private javax.swing.JComboBox<String> loggingLevelComboBox;
     private javax.swing.JLabel loggingLevelLabel;
+    private javax.swing.JPanel mainPanel;
     private javax.swing.JComboBox<JavaHeapSize> maximumMemoryComboBox;
     private javax.swing.JLabel maximumMemoryLabel;
+    private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }

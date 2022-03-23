@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import java.util.logging.StreamHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.apache.commons.lang3.SystemUtils;
@@ -62,6 +64,22 @@ public class Launcher {
             workDir = workDirFile;
         } else {
             workDir = new File(getUserConfigurationDirectory(), WORK_DIRECTORY_NAME);
+        }
+    }
+    
+    public void startLogging(String applicationName, String applicationVersion) {
+        FileOutputStream fileStream;
+        try {
+            File logsDir = new File(workDir, "logs");
+            logsDir.mkdirs();
+            File currentLogFile = new File(logsDir, "current.log");
+            currentLogFile.createNewFile();
+            fileStream = new FileOutputStream(currentLogFile);
+            Logger logger = Logger.getGlobal();
+            logger.addHandler(new StreamHandler(fileStream, new SimpleFormatter()));
+            logger.info(applicationName + " - version " + applicationVersion);
+        } catch (IOException | SecurityException ex) {
+            Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
