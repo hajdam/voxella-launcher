@@ -263,7 +263,7 @@ public class TerasologyGameComponent extends JComponent {
         int bgHeight;
         int bgX = 0;
         int bgY = 0;
-        if (bgImageSize.width * size.height > size.width * bgImageSize.height) {
+        if (bgImageSize.width * size.height >= size.width * bgImageSize.height) {
             bgWidth = size.height * bgImageSize.width / bgImageSize.height;
             bgX = -(bgWidth - size.width) / 2;
             bgHeight = size.height;

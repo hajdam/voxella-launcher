@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -46,10 +47,13 @@ public class Launcher {
     public static final String PREFERENCES_VERSION = "version";
     public static final String PREFERENCES_LANGUAGE = "language";
     public static final String PREFERENCES_THEME = "themeClass";
+    public static final String PREFERENCES_CHECK_FOR_UPDATES = "checkForUpdates";
+    public static final String PREFERENCES_START_WITH = "startWith";
 
     private LauncherPreferences preferences;
     private final File executionDir;
     private final File workDir;
+    private File currentLogFile;
 
     public Launcher() {
         File executionDirFile;
@@ -66,18 +70,18 @@ public class Launcher {
             workDir = new File(getUserConfigurationDirectory(), WORK_DIRECTORY_NAME);
         }
     }
-    
+
     public void startLogging(String applicationName, String applicationVersion) {
         FileOutputStream fileStream;
         try {
-            File logsDir = new File(workDir, "logs");
-            logsDir.mkdirs();
-            File currentLogFile = new File(logsDir, "current.log");
+            currentLogFile = getCurrentLogFile();
             currentLogFile.createNewFile();
             fileStream = new FileOutputStream(currentLogFile);
             Logger logger = Logger.getGlobal();
-            logger.addHandler(new StreamHandler(fileStream, new SimpleFormatter()));
+            StreamHandler streamHandler = new StreamHandler(fileStream, new SimpleFormatter());
+            logger.addHandler(streamHandler);
             logger.info(applicationName + " - version " + applicationVersion);
+            streamHandler.flush();
         } catch (IOException | SecurityException ex) {
             Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -108,6 +112,13 @@ public class Launcher {
     @Nonnull
     private File getUserConfigurationDirectory() {
         return SystemUtils.getUserHome();
+    }
+
+    @Nonnull
+    public File getCurrentLogFile() {
+        File logsDir = new File(workDir, "logs");
+        logsDir.mkdirs();
+        return new File(logsDir, "current.log");
     }
 
     @ParametersAreNonnullByDefault

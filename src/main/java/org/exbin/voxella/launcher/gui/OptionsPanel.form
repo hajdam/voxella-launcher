@@ -54,7 +54,6 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="checkForUpdatesButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="logsButton" min="-2" max="-2" attributes="0"/>
@@ -137,7 +136,6 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="org/exbin/voxella/launcher/gui/resources/OptionsPanel.properties" key="checkForUpdateCheckBox.text" replaceFormat="resourceBundle.getString(&quot;{key}&quot;)"/>
             </Property>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="startWithLabel">
@@ -148,9 +146,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="startWithComboBox">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -160,12 +155,18 @@
             <Property name="text" type="java.lang.String" value="Check for Updates"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkForUpdatesButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="logsButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Logs..."/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logsButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="aboutButton">
           <Properties>

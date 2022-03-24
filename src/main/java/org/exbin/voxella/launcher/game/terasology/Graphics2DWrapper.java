@@ -47,10 +47,13 @@ import java.util.Map;
 public class Graphics2DWrapper extends Graphics2D {
     
     private final Graphics2D g;
+    private Color origColor;
     private final int transparencyRatio;
 
     public Graphics2DWrapper(Graphics2D g, int transparencyRatio) {
         this.g = g;
+        this.origColor = g.getColor();
+        setModColor(origColor);
         this.transparencyRatio = transparencyRatio;
     }
 
@@ -81,22 +84,30 @@ public class Graphics2DWrapper extends Graphics2D {
 
     @Override
     public void drawString(String str, int x, int y) {
+        g.setColor(origColor);
         g.drawString(str, x, y);
+        setModColor(origColor);
     }
 
     @Override
     public void drawString(String str, float x, float y) {
+        g.setColor(origColor);
         g.drawString(str, x, y);
+        setModColor(origColor);
     }
 
     @Override
     public void drawString(AttributedCharacterIterator iterator, int x, int y) {
+        g.setColor(origColor);
         g.drawString(iterator, x, y);
+        setModColor(origColor);
     }
 
     @Override
     public void drawString(AttributedCharacterIterator iterator, float x, float y) {
+        g.setColor(origColor);
         g.drawString(iterator, x, y);
+        setModColor(origColor);
     }
 
     @Override
@@ -252,8 +263,8 @@ public class Graphics2DWrapper extends Graphics2D {
 
     @Override
     public void setColor(Color color) {
-        Color modColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() * transparencyRatio / 255);
-        g.setColor(modColor);
+        this.origColor = color;
+        setModColor(color);
     }
 
     @Override
@@ -405,5 +416,9 @@ public class Graphics2DWrapper extends Graphics2D {
     public void dispose() {
         g.dispose();
     }
-    
+
+    private void setModColor(Color color) {
+        Color modColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha() * transparencyRatio / 255);
+        g.setColor(modColor);
+    }
 }

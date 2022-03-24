@@ -114,6 +114,18 @@ public class DefaultPopupMenu {
         defaultPopupMenu.registerToEventQueue();
     }
 
+    public static void updateUI() {
+        if (instance != null) {
+            if (instance.defaultPopupMenu != null) {
+                SwingUtilities.updateComponentTreeUI(instance.defaultPopupMenu);
+
+            }
+            if (instance.defaultEditPopupMenu != null) {
+                SwingUtilities.updateComponentTreeUI(instance.defaultEditPopupMenu);
+            }
+        }
+    }
+
     private void registerToEventQueue() {
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(new PopupEventQueue());
     }

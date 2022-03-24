@@ -18,11 +18,13 @@ package org.exbin.voxella.launcher;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dialog;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,18 +46,20 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.exbin.voxella.launcher.api.GameController;
 import org.exbin.voxella.launcher.gui.AboutPanel;
-import org.exbin.voxella.launcher.gui.CheckForUpdatePanel;
 import org.exbin.voxella.launcher.gui.GameListPanel;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
 import org.exbin.voxella.launcher.gui.NewsPanel;
+import org.exbin.voxella.launcher.gui.OperationProgressPanel;
 import org.exbin.voxella.launcher.gui.OptionsPanel;
 import org.exbin.voxella.launcher.gui.UserStatusPanel;
 import org.exbin.voxella.launcher.model.GameRecord;
 import org.exbin.voxella.launcher.model.LanguageRecord;
 import org.exbin.voxella.launcher.model.Launcher;
+import org.exbin.voxella.launcher.model.StartWithMode;
 import org.exbin.voxella.launcher.model.ThemeRecord;
 import org.exbin.voxella.launcher.preferences.Preferences;
 import org.exbin.voxella.launcher.utils.ClipboardUtils;
+import org.exbin.voxella.launcher.utils.DefaultPopupMenu;
 import org.exbin.voxella.launcher.utils.WindowUtils;
 import org.exbin.voxella.launcher.utils.gui.CloseControlPanel;
 
@@ -81,6 +85,24 @@ public class Main {
         launcher.startLogging(applicationName, applicationVersion);
         final Preferences settings = launcher.loadSettings();
 
+        boolean checkForUpdateFromSettings;
+        try {
+            checkForUpdateFromSettings = settings.getBoolean(Launcher.PREFERENCES_CHECK_FOR_UPDATES, true);
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            checkForUpdateFromSettings = true;
+        }
+        boolean checkForUpdate = checkForUpdateFromSettings;
+
+        StartWithMode startWithModeFromSettings;
+        try {
+            startWithModeFromSettings = StartWithMode.fromKey(settings.get(Launcher.PREFERENCES_START_WITH, StartWithMode.GAMES_OR_BROWSE.getKey()));
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            startWithModeFromSettings = StartWithMode.GAMES_OR_BROWSE;
+        }
+        StartWithMode startWithMode = startWithModeFromSettings;
+
         String language = settings.get(Launcher.PREFERENCES_LANGUAGE, "");
         if (!language.isEmpty()) {
             Locale locale = new Locale(language);
@@ -93,7 +115,7 @@ public class Main {
         FlatLightLaf.installLafInfo();
         try {
             UIManager.setLookAndFeel(themeClass);
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
             System.err.println("Failed to initialize LaF");
         }
         ClipboardUtils.registerDefaultClipboardPopupMenu();
@@ -185,10 +207,12 @@ public class Main {
             }
 
             OptionsPanel optionsPanel = new OptionsPanel();
+            optionsPanel.setCheckForUpdate(checkForUpdate);
+            optionsPanel.setSelectedStartWithMode(startWithMode);
             optionsPanel.setLanguages(languageRecords);
             optionsPanel.setThemes(themeRecords);
-            optionsPanel.setActiveTheme(themeClass);
-            optionsPanel.setActiveLanguage(language);
+            optionsPanel.setSelectedTheme(themeClass);
+            optionsPanel.setSelectedLanguage(language);
             optionsPanel.setThemeChangeListener((themeRecord) -> {
                 switchLookAndFeel(themeRecord.getClassName(), applicationFrame);
                 settings.put(Launcher.PREFERENCES_THEME, themeRecord.getClassName());
@@ -222,6 +246,19 @@ public class Main {
                     dialog.show();
                 }
             });
+            optionsPanel.setOpenLogsAction(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (Desktop.isDesktopSupported()) {
+                        try {
+                            Desktop desktop = Desktop.getDesktop();
+                            desktop.open(launcher.getCurrentLogFile());
+                        } catch (IOException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            });
 
             mainPanel.setGameListComponent(gameListPanel);
             mainPanel.setNewsComponent(newsPanel);
@@ -230,7 +267,9 @@ public class Main {
             UserStatusPanel userStatusPanel = new UserStatusPanel();
             mainPanel.setUserStatusPanel(userStatusPanel);
 
-            CheckForUpdatePanel checkForUdatePanel = new CheckForUpdatePanel();
+            OperationProgressPanel checkForUdatePanel = new OperationProgressPanel();
+            checkForUdatePanel.setProgress(720);
+            checkForUdatePanel.setCancellable(true);
             mainPanel.setProgressStatusPanel(checkForUdatePanel);
 
             if (applicationIcon != null) {
@@ -242,7 +281,13 @@ public class Main {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     super.windowClosing(e);
-                    launcher.saveSettings();
+                    try {
+                        settings.put(Launcher.PREFERENCES_CHECK_FOR_UPDATES, String.valueOf(optionsPanel.getCheckForUpdate()));
+                        settings.put(Launcher.PREFERENCES_START_WITH, optionsPanel.getSelectedStartWithMode().getKey());
+                        launcher.saveSettings();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     System.exit(0);
                 }
             });
@@ -266,8 +311,9 @@ public class Main {
             if (applicationFrame != null) {
                 SwingUtilities.updateComponentTreeUI(applicationFrame);
             }
+            DefaultPopupMenu.updateUI();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(OptionsPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

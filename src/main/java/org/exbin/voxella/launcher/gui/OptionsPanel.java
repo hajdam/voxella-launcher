@@ -27,6 +27,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 import org.exbin.voxella.launcher.model.LanguageRecord;
+import org.exbin.voxella.launcher.model.StartWithMode;
 import org.exbin.voxella.launcher.model.ThemeRecord;
 
 /**
@@ -40,6 +41,8 @@ public class OptionsPanel extends javax.swing.JPanel {
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/OptionsPanel");
 
     private Action aboutAction;
+    private Action openLogsAction;
+    private Action checkForUpdatesAction;
     private ThemeChangeListener themeChangeListener;
     private LanguageChangeListener languageChangeListener;
 
@@ -99,10 +102,10 @@ public class OptionsPanel extends javax.swing.JPanel {
         });
 
         DefaultComboBoxModel<String> startWithModel = (DefaultComboBoxModel<String>) startWithComboBox.getModel();
+        startWithModel.addElement(resourceBundle.getString("startWith.gamesOrBrowse"));
         startWithModel.addElement(resourceBundle.getString("startWith.alwaysGamesTab"));
         startWithModel.addElement(resourceBundle.getString("startWith.alwaysBrowseTab"));
         startWithModel.addElement(resourceBundle.getString("startWith.AlwaysNewsTab"));
-        startWithModel.addElement(resourceBundle.getString("startWith.gamesOrBrowse"));
     }
 
     public void setLanguages(Collection<LanguageRecord> languages) {
@@ -117,7 +120,7 @@ public class OptionsPanel extends javax.swing.JPanel {
         }
     }
 
-    public void setActiveTheme(String themeClass) {
+    public void setSelectedTheme(String themeClass) {
         for (int i = 0; i < themeComboBox.getItemCount(); i++) {
             ThemeRecord record = themeComboBox.getItemAt(i);
             if (themeClass.equals(record.getClassName())) {
@@ -126,8 +129,8 @@ public class OptionsPanel extends javax.swing.JPanel {
             }
         }
     }
-    
-    public void setActiveLanguage(String locale) {
+
+    public void setSelectedLanguage(String locale) {
         for (int i = 0; i < languageComboBox.getItemCount(); i++) {
             LanguageRecord record = languageComboBox.getItemAt(i);
             if (locale.equals(record.getLocale())) {
@@ -135,6 +138,23 @@ public class OptionsPanel extends javax.swing.JPanel {
                 break;
             }
         }
+    }
+
+    @Nonnull
+    public StartWithMode getSelectedStartWithMode() {
+        return StartWithMode.values()[startWithComboBox.getSelectedIndex()];
+    }
+
+    public void setSelectedStartWithMode(StartWithMode startWithMode) {
+        startWithComboBox.setSelectedIndex(startWithMode.ordinal());
+    }
+
+    public boolean getCheckForUpdate() {
+        return checkForUpdateCheckBox.isSelected();
+    }
+
+    public void setCheckForUpdate(boolean updateMode) {
+        checkForUpdateCheckBox.setSelected(updateMode);
     }
 
     public void setThemeChangeListener(ThemeChangeListener themeChangeListener) {
@@ -148,6 +168,16 @@ public class OptionsPanel extends javax.swing.JPanel {
     public void setAboutAction(Action aboutAction) {
         this.aboutAction = aboutAction;
         aboutButton.setEnabled(true);
+    }
+
+    public void setOpenLogsAction(Action openLogsAction) {
+        this.openLogsAction = openLogsAction;
+        logsButton.setEnabled(true);
+    }
+
+    public void setCheckForUpdatesAction(Action checkForUpdatesAction) {
+        this.checkForUpdatesAction = checkForUpdatesAction;
+        checkForUpdatesButton.setEnabled(true);
     }
 
     /**
@@ -195,17 +225,24 @@ public class OptionsPanel extends javax.swing.JPanel {
 
         checkForUpdateCheckBox.setSelected(true);
         checkForUpdateCheckBox.setText(resourceBundle.getString("checkForUpdateCheckBox.text")); // NOI18N
-        checkForUpdateCheckBox.setEnabled(false);
 
         startWithLabel.setText(resourceBundle.getString("startWithLabel.text")); // NOI18N
 
-        startWithComboBox.setEnabled(false);
-
         checkForUpdatesButton.setText("Check for Updates");
         checkForUpdatesButton.setEnabled(false);
+        checkForUpdatesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkForUpdatesButtonActionPerformed(evt);
+            }
+        });
 
         logsButton.setText("Logs...");
         logsButton.setEnabled(false);
+        logsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logsButtonActionPerformed(evt);
+            }
+        });
 
         aboutButton.setText(resourceBundle.getString("aboutButton.text")); // NOI18N
         aboutButton.setEnabled(false);
@@ -223,7 +260,6 @@ public class OptionsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(actionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, actionsPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(checkForUpdatesButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logsButton)
@@ -272,6 +308,14 @@ public class OptionsPanel extends javax.swing.JPanel {
     private void aboutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutButtonActionPerformed
         aboutAction.actionPerformed(evt);
     }//GEN-LAST:event_aboutButtonActionPerformed
+
+    private void logsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsButtonActionPerformed
+        openLogsAction.actionPerformed(evt);
+    }//GEN-LAST:event_logsButtonActionPerformed
+
+    private void checkForUpdatesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkForUpdatesButtonActionPerformed
+        checkForUpdatesAction.actionPerformed(evt);
+    }//GEN-LAST:event_checkForUpdatesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aboutButton;
