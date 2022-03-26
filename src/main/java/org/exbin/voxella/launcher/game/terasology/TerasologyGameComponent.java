@@ -102,15 +102,17 @@ public class TerasologyGameComponent extends JComponent {
         });
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                int mouseX = e.getX();
-                int mouseY = e.getY();
+            public void mouseReleased(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    int mouseX = e.getX();
+                    int mouseY = e.getY();
 
-                AffiliateLink targetLink = getActiveAffiate(mouseX, mouseY);
-                if (targetLink != null) {
-                    BareBonesBrowserLaunch.openDesktopURL(affiliateUrl.get(targetLink));
-                } else if (isInHeader(mouseX, mouseY)) {
-                    BareBonesBrowserLaunch.openDesktopURL(headerUrl);
+                    AffiliateLink targetLink = getActiveAffiate(mouseX, mouseY);
+                    if (targetLink != null) {
+                        BareBonesBrowserLaunch.openDesktopURL(affiliateUrl.get(targetLink));
+                    } else if (isInHeader(mouseX, mouseY)) {
+                        BareBonesBrowserLaunch.openDesktopURL(headerUrl);
+                    }
                 }
             }
 

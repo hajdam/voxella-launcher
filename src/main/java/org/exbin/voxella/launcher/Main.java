@@ -116,7 +116,7 @@ public class Main {
         try {
             UIManager.setLookAndFeel(themeClass);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
-            System.err.println("Failed to initialize LaF");
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Failed to initialize LaF", ex);
         }
         ClipboardUtils.registerDefaultClipboardPopupMenu();
 
@@ -254,7 +254,7 @@ public class Main {
                             Desktop desktop = Desktop.getDesktop();
                             desktop.open(launcher.getCurrentLogFile());
                         } catch (IOException ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Unable to show logs file", ex);
                         }
                     }
                 }
@@ -286,7 +286,7 @@ public class Main {
                         settings.put(Launcher.PREFERENCES_START_WITH, optionsPanel.getSelectedStartWithMode().getKey());
                         launcher.saveSettings();
                     } catch (Exception ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Settings save failed", ex);
                     }
                     System.exit(0);
                 }
@@ -313,7 +313,7 @@ public class Main {
             }
             DefaultPopupMenu.updateUI();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Look and feel switching failed", ex);
         }
     }
 }

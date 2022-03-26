@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JLabel;
+import javax.swing.event.HyperlinkEvent;
 import org.exbin.voxella.launcher.utils.BareBonesBrowserLaunch;
 import org.exbin.voxella.launcher.utils.WindowUtils;
 
@@ -47,6 +48,12 @@ public class AboutPanel extends javax.swing.JPanel {
             appTitleLabel.setForeground(Color.WHITE);
             appDescLabel.setForeground(Color.WHITE);
         }
+
+        resourcesEditorPane.addHyperlinkListener((HyperlinkEvent e) -> {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+            }
+        });
     }
 
     /**
@@ -74,6 +81,9 @@ public class AboutPanel extends javax.swing.JPanel {
         licenseTextField = new javax.swing.JTextField();
         javax.swing.JLabel homepageLabel = new javax.swing.JLabel();
         appHomepageLabel = new javax.swing.JLabel();
+        resourcesLabel = new javax.swing.JLabel();
+        resourcesScrollPane = new javax.swing.JScrollPane();
+        resourcesEditorPane = new javax.swing.JEditorPane();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -94,13 +104,13 @@ public class AboutPanel extends javax.swing.JPanel {
         aboutHeaderTitlePanel.setLayout(aboutHeaderTitlePanelLayout);
         aboutHeaderTitlePanelLayout.setHorizontalGroup(
             aboutHeaderTitlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 509, Short.MAX_VALUE)
+            .addGap(0, 517, Short.MAX_VALUE)
             .addGroup(aboutHeaderTitlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(aboutHeaderTitlePanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(aboutHeaderTitlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(appDescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE))
+                        .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE))
                     .addContainerGap()))
         );
         aboutHeaderTitlePanelLayout.setVerticalGroup(
@@ -161,6 +171,13 @@ public class AboutPanel extends javax.swing.JPanel {
             }
         });
 
+        resourcesLabel.setText(resourceBundle.getString("resourcesLabel.text")); // NOI18N
+
+        resourcesEditorPane.setEditable(false);
+        resourcesEditorPane.setContentType("text/html"); // NOI18N
+        resourcesEditorPane.setText("<html>\n  <head>\n  </head>\n  <body>\n    <p>Tango icon library:<br/><a href=\"https://tango-project.org/Tango_Icon_Theme_Guidelines\">https://tango-project.org/Tango_Icon_Theme_Guidelines</a></p>\n<p>Open Icon Library:<br/><a href=\"https://sourceforge.net/projects/openiconlibrary/\">https://sourceforge.net/projects/openiconlibrary/</a></p>\n<p>Fam fam fam flag icons:<br/><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></p>\n    </p>\n  </body>\n</html>\n");
+        resourcesScrollPane.setViewportView(resourcesEditorPane);
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -168,18 +185,24 @@ public class AboutPanel extends javax.swing.JPanel {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(vendorLabel)
-                    .addComponent(homepageLabel)
-                    .addComponent(appLicenseLabel)
-                    .addComponent(versionLabel)
-                    .addComponent(nameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                    .addComponent(vendorTextField)
-                    .addComponent(licenseTextField)
-                    .addComponent(appHomepageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(versionTextField))
+                    .addComponent(resourcesScrollPane)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(vendorLabel)
+                            .addComponent(homepageLabel)
+                            .addComponent(appLicenseLabel)
+                            .addComponent(versionLabel)
+                            .addComponent(nameLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+                            .addComponent(vendorTextField)
+                            .addComponent(licenseTextField)
+                            .addComponent(appHomepageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(versionTextField)))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(resourcesLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
@@ -205,7 +228,11 @@ public class AboutPanel extends javax.swing.JPanel {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(homepageLabel)
                     .addComponent(appHomepageLabel))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(resourcesLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(resourcesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         add(mainPanel, java.awt.BorderLayout.CENTER);
@@ -244,6 +271,9 @@ public class AboutPanel extends javax.swing.JPanel {
     private javax.swing.JTextField licenseTextField;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTextField nameTextField;
+    private javax.swing.JEditorPane resourcesEditorPane;
+    private javax.swing.JLabel resourcesLabel;
+    private javax.swing.JScrollPane resourcesScrollPane;
     private javax.swing.JTextField vendorTextField;
     private javax.swing.JTextField versionTextField;
     // End of variables declaration//GEN-END:variables
