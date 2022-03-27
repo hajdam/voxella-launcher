@@ -35,5 +35,12 @@ public class TerasologyGameController implements GameController {
     public void remove() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    public void performUpdate() {
+        
+    }
 
+    public void performDownload() {
+        
+    }
 }

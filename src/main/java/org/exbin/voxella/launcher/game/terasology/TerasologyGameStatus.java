@@ -15,9 +15,53 @@
  */
 package org.exbin.voxella.launcher.game.terasology;
 
+import java.io.File;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Terasology game status.
+ *
+ * @author Voxella Project
+ */
 @ParametersAreNonnullByDefault
-public enum TerasologyGameStatus {
-    
+public class TerasologyGameStatus {
+
+    private long versionsTimestamp;
+    private long newsTimestamp;
+    private long componentTimestamp;
+
+    public TerasologyGameStatus() {
+    }
+
+    public void loadFromFile(File versionsFile) {
+        
+    }
+
+    public void saveToFile(File versionsFile) {
+
+    }
+
+    public long getVersionsTimestamp() {
+        return versionsTimestamp;
+    }
+
+    public void setVersionsTimestamp(long versionsTimestamp) {
+        this.versionsTimestamp = versionsTimestamp;
+    }
+
+    public long getNewsTimestamp() {
+        return newsTimestamp;
+    }
+
+    public void setNewsTimestamp(long newsTimestamp) {
+        this.newsTimestamp = newsTimestamp;
+    }
+
+    public long getComponentTimestamp() {
+        return componentTimestamp;
+    }
+
+    public void setComponentTimestamp(long componentTimestamp) {
+        this.componentTimestamp = componentTimestamp;
+    }
 }

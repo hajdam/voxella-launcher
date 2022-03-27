@@ -17,7 +17,21 @@ package org.exbin.voxella.launcher.game.terasology;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Terasology game preferences.
+ *
+ * @author Voxella Project
+ */
 @ParametersAreNonnullByDefault
-public enum TerasologyGamePreferences {
+public class TerasologyGamePreferences {
+    
+    private TerasologyGameVersions.GameVersion gameVersion;
+    private String javaPath;
+    private JavaHeapSize initMemory;
+    private JavaHeapSize maximumMemory;
+
+    public TerasologyGamePreferences() {
+    }
+    
     
 }

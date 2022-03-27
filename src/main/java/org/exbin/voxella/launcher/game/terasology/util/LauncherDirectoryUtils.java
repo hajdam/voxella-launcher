@@ -1,0 +1,152 @@
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
+package org.exbin.voxella.launcher.game.terasology.util;
+
+import java.util.logging.Logger;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.stream.Stream;
+import org.exbin.voxella.launcher.game.terasology.GameDataDirectoryNames;
+
+public final class LauncherDirectoryUtils {
+
+    public static final String LAUNCHER_APPLICATION_DIR_NAME = "TerasologyLauncher";
+    public static final String GAME_APPLICATION_DIR_NAME = "Terasology";
+    public static final String GAME_DATA_DIR_NAME = "Terasology";
+    public static final String CACHE_DIR_NAME = "cache";
+
+    private static final String PROPERTY_USER_HOME = "user.home";
+    private static final String ENV_APPDATA = "APPDATA";
+    private static final String MAC_PATH = "Library/Application Support/";
+    private static final Logger logger = Logger.getLogger(LauncherDirectoryUtils.class.getName());
+
+    private LauncherDirectoryUtils() {
+    }
+
+    /**
+     * Checks whether the given directory contains any game data, e.g., save games or screenshots.
+     *
+     * @param gameInstallationPath the game installation folder
+     * @return true if game data is stored in the installation directory.
+     */
+    public static boolean containsGameData(final Path gameInstallationPath) {
+        boolean containsGameData = false;
+        if (FileUtils.isReadableDir(gameInstallationPath)) {
+            try (Stream<Path> stream = Files.list(gameInstallationPath)) {
+                containsGameData = stream.anyMatch(child -> Files.isDirectory(child)
+                        && isGameDataDirectoryName(child.getFileName().toString()) && containsFiles(child));
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Failed to check if folder contains game data", e);
+            }
+        }
+        return containsGameData;
+    }
+
+    /**
+     * Checks if the directory name is a Terasology game data directory.
+     *
+     * @param directoryName name to check
+     * @return true if the directory name is a Terasology game data directory
+     */
+    private static boolean isGameDataDirectoryName(String directoryName) {
+        return Arrays.stream(GameDataDirectoryNames.values())
+                .anyMatch(gameDataDirectoryNames -> gameDataDirectoryNames.getName().equals(directoryName));
+    }
+
+    /**
+     * Checks if a directory and all subdirectories are containing files.
+     *
+     * @param directory directory to check
+     * @return true if the directory contains one or more files
+     */
+    public static boolean containsFiles(Path directory) {
+        if (directory == null || !Files.exists(directory) || !Files.isDirectory(directory)) {
+            return false;
+        }
+
+        try (Stream<Path> stream = Files.list(directory)) {
+            return stream.anyMatch(file -> Files.isRegularFile(file) || Files.isDirectory(file) && containsFiles(file));
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Should only be executed once at the start.
+     *
+     * @param platform        the operating system
+     * @param applicationName the name of the application
+     * @return the app. folder
+     */
+    public static Path getApplicationDirectory(Platform platform, String applicationName) {
+        final Path userHome = Paths.get(System.getProperty(PROPERTY_USER_HOME, "."));
+        final Path applicationDirectory;
+
+        if (platform.isWindows()) {
+            final String envAppData = System.getenv(ENV_APPDATA);
+            if ((envAppData != null) && (envAppData.length() > 0)) {
+                applicationDirectory = Paths.get(envAppData).resolve(applicationName);
+            } else {
+                applicationDirectory = userHome.resolve(applicationName);
+                // Alternatives :
+                //   System.getenv("HOME")
+                //   System.getenv("USERPROFILE")
+                //   System.getenv("HOMEDRIVE") + System.getenv("HOMEPATH")
+            }
+        } else if (platform.isLinux()) {
+            applicationDirectory = userHome.resolve('.' + applicationName.toLowerCase(Locale.ENGLISH));
+        } else if (platform.isMac()) {
+            applicationDirectory = userHome.resolve(MAC_PATH + applicationName);
+        } else {
+            applicationDirectory = userHome.resolve(applicationName);
+        }
+
+        return applicationDirectory;
+    }
+
+    /**
+     * Should only be executed once at the start.
+     *
+     * @param platform the operating system
+     * @return the gama data directory
+     */
+    public static Path getGameDataDirectory(Platform platform) {
+        final Path userHome = Paths.get(System.getProperty(PROPERTY_USER_HOME, "."));
+        final Path gameDataDirectory;
+
+        if (platform.isWindows()) {
+            Path path = Paths.get(System.getenv("APPDATA"));
+            gameDataDirectory = path.resolve(GAME_DATA_DIR_NAME);
+        } else if (platform.isLinux()) {
+            gameDataDirectory = userHome.resolve('.' + GAME_DATA_DIR_NAME.toLowerCase(Locale.ENGLISH));
+        } else if (platform.isMac()) {
+            gameDataDirectory = userHome.resolve(MAC_PATH + GAME_DATA_DIR_NAME);
+        } else {
+            gameDataDirectory = userHome.resolve(GAME_DATA_DIR_NAME);
+        }
+
+        return gameDataDirectory;
+    }
+
+    public static Path getInstallationDirectory() {
+        final URL location = LauncherDirectoryUtils.class.getProtectionDomain().getCodeSource().getLocation();
+        Path installationDirectory = null;
+        try {
+            final Path launcherLocation = Paths.get(location.toURI());
+            logger.log(Level.SEVERE, "Launcher location: {}", launcherLocation);
+            installationDirectory = launcherLocation.getParent().getParent();
+            logger.log(Level.SEVERE, "Launcher installation directory: {}", installationDirectory);
+        } catch (URISyntaxException e) {
+            logger.log(Level.SEVERE, "Could not determine launcher installation directory.", e);
+        }
+        return installationDirectory;
+    }
+}

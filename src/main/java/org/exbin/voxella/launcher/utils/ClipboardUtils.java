@@ -23,7 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JPopupMenu;
 
 /**
- * Clipboard utility methods
+ * Clipboard utility methods.
  *
  * @author Voxella Project
  */

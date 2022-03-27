@@ -118,6 +118,10 @@ public class TerasologyGameComponent extends JComponent {
 
             @Override
             public void mouseExited(MouseEvent e) {
+                if (activeLink != null) {
+                    activeLink = null;
+                    repaint();
+                }
                 setCursor(null);
             }
 
