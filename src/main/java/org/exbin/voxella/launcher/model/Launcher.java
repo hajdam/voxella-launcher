@@ -20,7 +20,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -55,7 +54,9 @@ public class Launcher {
     private final File workDir;
     private File currentLogFile;
 
-    public Launcher() {
+    private static Launcher instance = null;
+
+    private Launcher() {
         File executionDirFile;
         try {
             executionDirFile = new File(Launcher.class.getProtectionDomain().getCodeSource().getLocation().toURI());
@@ -69,6 +70,13 @@ public class Launcher {
         } else {
             workDir = new File(getUserConfigurationDirectory(), WORK_DIRECTORY_NAME);
         }
+    }
+
+    public static synchronized Launcher getInstance() {
+        if (instance == null) {
+            instance = new Launcher();
+        }
+        return instance;
     }
 
     public void startLogging(String applicationName, String applicationVersion) {
@@ -112,6 +120,11 @@ public class Launcher {
     @Nonnull
     private File getUserConfigurationDirectory() {
         return SystemUtils.getUserHome();
+    }
+
+    @Nonnull
+    public File getWorkDir() {
+        return workDir;
     }
 
     @Nonnull

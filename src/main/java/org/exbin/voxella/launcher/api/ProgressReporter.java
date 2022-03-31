@@ -16,29 +16,17 @@
 package org.exbin.voxella.launcher.api;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.voxella.launcher.game.terasology.util.ProgressListener;
 
 /**
- * Game controller interface.
+ * Progress observer interface.
  *
  * @author Voxella Project
  */
 @ParametersAreNonnullByDefault
-public interface GameController {
+public interface ProgressReporter {
 
-    /**
-     * Runs the game.
-     */
-    void runGame();
+    ProgressListener startOperation(String operationTitle);
 
-    /**
-     * Removes the game and all it's content.
-     */
-    void remove();
-
-    /**
-     * Progress reporter.
-     *
-     * @param progressReporter progress reporter
-     */
-    void setProgressReporter(ProgressReporter progressReporter);
+    void endOperation(ProgressListener listener);
 }

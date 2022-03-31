@@ -44,10 +44,10 @@ public final class FileUtils {
         try {
             final boolean deleted = Files.deleteIfExists(file);
             if (!deleted) {
-                LoggerUtils.log(logger, Level.SEVERE, "Could not silently delete file '{1}'!", file);
+                LoggerUtils.log(logger, Level.SEVERE, "Could not silently delete file '{0}'!", file);
             }
         } catch (IOException e) {
-            LoggerUtils.log(logger, Level.SEVERE, "Could not silently delete file '{1}'!", e, file);
+            LoggerUtils.log(logger, Level.SEVERE, "Could not silently delete file '{0}'!", e, file);
         }
     }
 
@@ -64,7 +64,7 @@ public final class FileUtils {
                 try {
                     Files.walkFileTree(path, new DeleteFileVisitor());
                 } catch (IOException e) {
-                    LoggerUtils.log(logger, Level.SEVERE, "Failed to delete '{1}'", e, path);
+                    LoggerUtils.log(logger, Level.SEVERE, "Failed to delete '{0}'", e, path);
                 }
             });
         }
@@ -78,7 +78,7 @@ public final class FileUtils {
      * @return true if successful
      */
     public static boolean extractZipTo(final Path archive, final Path outputLocation) {
-        LoggerUtils.log(logger, Level.SEVERE, "Extracting '{1}' to '{2}'", archive, outputLocation);
+        LoggerUtils.log(logger, Level.SEVERE, "Extracting '{0}' to '{1}'", archive, outputLocation);
 
         try {
             if (Files.notExists(outputLocation)) {
@@ -91,7 +91,7 @@ public final class FileUtils {
             }
             return true;
         } catch (IOException e) {
-            LoggerUtils.log(logger, Level.SEVERE, "Could not extract zip archive '{1}' to '{2}'!", e, archive, outputLocation);
+            LoggerUtils.log(logger, Level.SEVERE, "Could not extract zip archive '{0}' to '{1}'!", e, archive, outputLocation);
             return false;
         }
     }
@@ -105,7 +105,7 @@ public final class FileUtils {
      */
     public static void copyFolder(final Path source, final Path destination) throws IOException {
         if (Files.notExists(source)) {
-            LoggerUtils.log(logger, Level.SEVERE, "Source file doesn't exists! '{1}'", source);
+            LoggerUtils.log(logger, Level.SEVERE, "Source file doesn't exists! '{0}'", source);
             return;
         }
 

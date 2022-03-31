@@ -175,7 +175,7 @@ public class AboutPanel extends javax.swing.JPanel {
 
         resourcesEditorPane.setEditable(false);
         resourcesEditorPane.setContentType("text/html"); // NOI18N
-        resourcesEditorPane.setText("<html>\n  <head>\n  </head>\n  <body>\n    <p>Tango icon library:<br/><a href=\"https://tango-project.org/Tango_Icon_Theme_Guidelines\">https://tango-project.org/Tango_Icon_Theme_Guidelines</a></p>\n<p>Open Icon Library:<br/><a href=\"https://sourceforge.net/projects/openiconlibrary/\">https://sourceforge.net/projects/openiconlibrary/</a></p>\n<p>Fam fam fam flag icons:<br/><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></p>\n    </p>\n  </body>\n</html>\n");
+        resourcesEditorPane.setText("<html>\n  <head>\n  </head>\n  <body>\n    <p>Tango icon library:<br/><a href=\"http://tango.freedesktop.org/Tango_Icon_Library\">http://tango.freedesktop.org/Tango_Icon_Library</a></p>\n<p>Open Icon Library:<br/><a href=\"https://sourceforge.net/projects/openiconlibrary/\">https://sourceforge.net/projects/openiconlibrary/</a></p>\n<p>Fam fam fam flag icons:<br/><a href=\"http://www.famfamfam.com\">http://www.famfamfam.com</a></p>\n    </p>\n  </body>\n</html>\n");
         resourcesScrollPane.setViewportView(resourcesEditorPane);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);

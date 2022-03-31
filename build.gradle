@@ -83,6 +83,7 @@ dependencies {
     implementation 'com.formdev:flatlaf:2.0.1'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation group: 'com.vdurmont', name: 'semver4j', version: '3.1.0'
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     testImplementation group: 'junit', name: 'junit', version: '4.10'
 }
@@ -110,7 +111,11 @@ task fatJar(type: Jar) {
     archiveBaseName = 'voxella-launcher-fat'
     from {
         duplicatesStrategy = 'exclude'
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } 
+        configurations.runtimeClasspath.collect {
+        	it.isDirectory() ? it : zipTree(it).matching {
+        		exclude '/LICENSE.txt'
+        	}
+        }
     }
     with jar
 }

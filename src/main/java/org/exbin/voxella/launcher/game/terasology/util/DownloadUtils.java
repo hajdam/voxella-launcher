@@ -1,6 +1,5 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
-
 package org.exbin.voxella.launcher.game.terasology.util;
 
 import java.util.logging.Logger;
@@ -17,7 +16,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -39,11 +37,10 @@ public final class DownloadUtils {
 
         return result.thenAcceptAsync(response -> {
             long contentLength = response.headers().firstValueAsLong("content-length").orElse(0L);
-            logger.log(Level.INFO, MessageFormat.format("Download file '{0}' ({1}; {2}) from URL '{3}'.", file, contentLength,
-                    response.headers().firstValue("content-type"), downloadURL));
+            logger.log(Level.INFO, "Download file '{0}' ({1}; {2}) from URL '{3}'.",
+                    new Object[]{file, (Long) contentLength, response.headers().firstValue("content-type").get(), downloadURL.toString()});
 
-            try (BufferedInputStream in = new BufferedInputStream(response.body());
-                 BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
+            try ( BufferedInputStream in = new BufferedInputStream(response.body());  BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
                 downloadToFile(listener, contentLength, in, out);
             } catch (IOException e) {
                 throw new DownloadException("Could not download file from URL! URL=" + downloadURL + ", file=" + file, e);
@@ -93,7 +90,7 @@ public final class DownloadUtils {
     }
 
     private static void downloadToFile(ProgressListener listener, long contentLength, BufferedInputStream in,
-                                       BufferedOutputStream out) throws IOException {
+            BufferedOutputStream out) throws IOException {
         final byte[] buffer = new byte[2048];
         final float sizeFactor = 100f / contentLength;
         long writtenBytes = 0;

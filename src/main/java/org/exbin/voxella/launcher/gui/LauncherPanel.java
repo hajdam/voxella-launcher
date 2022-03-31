@@ -19,6 +19,7 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -144,12 +145,15 @@ public class LauncherPanel extends javax.swing.JPanel {
         statusWrapperPanel.revalidate();
     }
 
-    public void setProgressStatusPanel(JComponent statusPanel) {
+    public void setProgressStatusPanel(@Nullable JComponent statusPanel) {
         if (this.progressStatusPanel != null) {
             statusWrapperPanel.remove(this.progressStatusPanel);
         }
         this.progressStatusPanel = statusPanel;
-        statusWrapperPanel.add(statusPanel, BorderLayout.CENTER);
+        if (statusPanel != null) {
+            statusWrapperPanel.add(statusPanel, BorderLayout.CENTER);
+        }
         statusWrapperPanel.revalidate();
+        statusWrapperPanel.repaint();
     }
 }

@@ -344,7 +344,7 @@
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;  &lt;head&gt;&#xa;  &lt;/head&gt;&#xa;  &lt;body&gt;&#xa;    &lt;p&gt;Tango icon library:&lt;br/&gt;&lt;a href=&quot;https://tango-project.org/Tango_Icon_Theme_Guidelines&quot;&gt;https://tango-project.org/Tango_Icon_Theme_Guidelines&lt;/a&gt;&lt;/p&gt;&#xa;&lt;p&gt;Open Icon Library:&lt;br/&gt;&lt;a href=&quot;https://sourceforge.net/projects/openiconlibrary/&quot;&gt;https://sourceforge.net/projects/openiconlibrary/&lt;/a&gt;&lt;/p&gt;&#xa;&lt;p&gt;Fam fam fam flag icons:&lt;br/&gt;&lt;a href=&quot;http://www.famfamfam.com&quot;&gt;http://www.famfamfam.com&lt;/a&gt;&lt;/p&gt;&#xa;    &lt;/p&gt;&#xa;  &lt;/body&gt;&#xa;&lt;/html&gt;&#xa;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;  &lt;head&gt;&#xa;  &lt;/head&gt;&#xa;  &lt;body&gt;&#xa;    &lt;p&gt;Tango icon library:&lt;br/&gt;&lt;a href=&quot;http://tango.freedesktop.org/Tango_Icon_Library&quot;&gt;http://tango.freedesktop.org/Tango_Icon_Library&lt;/a&gt;&lt;/p&gt;&#xa;&lt;p&gt;Open Icon Library:&lt;br/&gt;&lt;a href=&quot;https://sourceforge.net/projects/openiconlibrary/&quot;&gt;https://sourceforge.net/projects/openiconlibrary/&lt;/a&gt;&lt;/p&gt;&#xa;&lt;p&gt;Fam fam fam flag icons:&lt;br/&gt;&lt;a href=&quot;http://www.famfamfam.com&quot;&gt;http://www.famfamfam.com&lt;/a&gt;&lt;/p&gt;&#xa;    &lt;/p&gt;&#xa;  &lt;/body&gt;&#xa;&lt;/html&gt;&#xa;"/>
               </Properties>
             </Component>
           </SubComponents>

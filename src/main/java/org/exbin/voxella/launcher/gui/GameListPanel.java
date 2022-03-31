@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
+import org.exbin.voxella.launcher.api.ProgressReporter;
 import org.exbin.voxella.launcher.game.terasology.TerasologyGameController;
 import org.exbin.voxella.launcher.game.terasology.TerasologyGameOptionsComponent;
 import org.exbin.voxella.launcher.model.GameRecord;
@@ -45,11 +46,14 @@ public class GameListPanel extends javax.swing.JPanel {
 
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/GameListPanel");
 
+    private boolean busyMode = false;
     private Action optionsAction;
     private Action launchAction;
     private JComponent activeComponent;
+    private final TerasologyGameController terasologyGameController;
 
     public GameListPanel() {
+        terasologyGameController = new TerasologyGameController("Terasology-latest");
         initComponents();
         init();
     }
@@ -84,17 +88,13 @@ public class GameListPanel extends javax.swing.JPanel {
                 activeComponent = targetComponent;
                 gameInfoPanel.revalidate();
                 gameInfoPanel.repaint();
-
-                boolean isSelected = index >= 0;
-                launchButton.setEnabled(isSelected);
-                optionsButton.setEnabled(isSelected && record.getOptionsComponent().isPresent());
-//                removeButton.setEnabled(isSelected);
+                updateState();
             }
         });
 
         DefaultListModel<GameRecord> gameRecordsModel = new DefaultListModel<>();
         ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/game/terasology/resources/gooey_star_48.png"));
-        GameRecord record = new GameRecord("Terasology Test", new TerasologyGameController(), new TerasologyGameComponent(), icon);
+        GameRecord record = new GameRecord("Terasology Test", terasologyGameController, new TerasologyGameComponent(), icon);
         record.setOptionsComponent(new TerasologyGameOptionsComponent());
         gameRecordsModel.addElement(record);
         gamesList.setModel(gameRecordsModel);
@@ -107,6 +107,10 @@ public class GameListPanel extends javax.swing.JPanel {
 
     public void setLaunchAction(Action launchAction) {
         this.launchAction = launchAction;
+    }
+
+    public void setProgressReporter(ProgressReporter progressReporter) {
+        terasologyGameController.setProgressReporter(progressReporter);
     }
 
     @Nonnull
@@ -161,6 +165,7 @@ public class GameListPanel extends javax.swing.JPanel {
         addGameButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/resources/images/open_icon_library/16x16/actions/edit-add-2.png"))); // NOI18N
         addGameButton.setText(resourceBundle.getString("addGameButton.text")); // NOI18N
         addGameButton.setToolTipText("");
+        addGameButton.setEnabled(false);
 
         gameInfoPanel.setLayout(new java.awt.BorderLayout());
 
@@ -259,4 +264,19 @@ public class GameListPanel extends javax.swing.JPanel {
     private javax.swing.JButton optionsButton;
     private javax.swing.JButton removeButton;
     // End of variables declaration//GEN-END:variables
+
+    public void setBusyMode(boolean busyMode) {
+        this.busyMode = busyMode;
+        updateState();
+    }
+
+    private void updateState() {
+        int index = gamesList.getSelectedIndex();
+        GameRecord record = index >= 0 ? gamesList.getModel().getElementAt(index) : null;
+        boolean isSelected = index >= 0;
+        addGameButton.setEnabled(!busyMode);
+        launchButton.setEnabled(!busyMode && isSelected);
+        optionsButton.setEnabled(!busyMode && isSelected && record.getOptionsComponent().isPresent());
+//                removeButton.setEnabled(!busyMode && isSelected);
+    }
 }

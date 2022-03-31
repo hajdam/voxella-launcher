@@ -39,12 +39,15 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.exbin.voxella.launcher.api.GameController;
+import org.exbin.voxella.launcher.api.ProgressReporter;
+import org.exbin.voxella.launcher.game.terasology.util.ProgressListener;
 import org.exbin.voxella.launcher.gui.AboutPanel;
 import org.exbin.voxella.launcher.gui.GameListPanel;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
@@ -81,7 +84,7 @@ public class Main {
         String applicationName = resourceBundle.getString("Application.name");
         String applicationVersion = resourceBundle.getString("Application.version");
 
-        final Launcher launcher = new Launcher();
+        final Launcher launcher = Launcher.getInstance();
         launcher.startLogging(applicationName, applicationVersion);
         final Preferences settings = launcher.loadSettings();
 
@@ -153,7 +156,17 @@ public class Main {
                 public void actionPerformed(ActionEvent e) {
                     GameRecord gameRecord = gameListPanel.getSelectedGame();
                     GameController controller = gameRecord.getController();
-                    controller.runGame();
+                    gameListPanel.setBusyMode(true);
+                    new Thread(() -> {
+                        try {
+                            controller.runGame();
+                        } catch (Exception ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Game launch failed", ex);
+                            JOptionPane.showMessageDialog(gameListPanel, "Game launch failed", "Game launch failed", JOptionPane.ERROR_MESSAGE);
+                        } finally {
+                            gameListPanel.setBusyMode(false);
+                        }
+                    }).start();
                 }
             });
 
@@ -268,9 +281,35 @@ public class Main {
             mainPanel.setUserStatusPanel(userStatusPanel);
 
             OperationProgressPanel checkForUdatePanel = new OperationProgressPanel();
-            checkForUdatePanel.setProgress(720);
-            checkForUdatePanel.setCancellable(true);
-            mainPanel.setProgressStatusPanel(checkForUdatePanel);
+            gameListPanel.setProgressReporter(new ProgressReporter() {
+                @Override
+                public ProgressListener startOperation(String operationTitle) {
+                    checkForUdatePanel.setProgressText(operationTitle);
+                    checkForUdatePanel.setCancellable(false);
+                    checkForUdatePanel.setProgress(0);
+                    mainPanel.setProgressStatusPanel(checkForUdatePanel);
+                    return new ProgressListener() {
+                        @Override
+                        public void update() {
+                        }
+
+                        @Override
+                        public void update(int progress) {
+                            checkForUdatePanel.setProgress(progress * 10);
+                        }
+
+                        @Override
+                        public boolean isCancelled() {
+                            return false;
+                        }
+                    };
+                }
+
+                @Override
+                public void endOperation(ProgressListener listener) {
+                    mainPanel.setProgressStatusPanel(null);
+                }
+            });
 
             if (applicationIcon != null) {
                 applicationFrame.setIconImage(applicationIcon);
