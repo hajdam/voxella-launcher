@@ -1,5 +1,5 @@
 plugins {
-    id 'base'
+    id 'java'
     id 'distribution'
     id 'maven-publish'
     id 'edu.sc.seis.launch4j' version '2.5.1'
@@ -15,10 +15,32 @@ publish.dependsOn {
     project(':modules').subprojects.publish
 }
 
-distZip.dependsOn (project(':apps').subprojects.findAll { it.name != "sample" }.assemble)
-distTar.dependsOn (project(':apps').subprojects.findAll { it.name != "sample" }.assemble)
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': project(':apps:voxella-launcher-app').mainClass
+    }
 
-build.dependsOn(project(":apps:voxella-launcher-app").fatJar)
+    archiveBaseName = 'voxella-launcher-fat'
+    from {
+        duplicatesStrategy = 'exclude'
+        project(':apps:voxella-launcher-app').configurations.runtimeClasspath.collect {
+        	it.isDirectory() ? it : zipTree(it).matching {
+        		exclude '/LICENSE.txt'
+        	}
+        }
+    }
+    from {
+        duplicatesStrategy = 'exclude'
+        zipTree(project(':apps:voxella-launcher-app').jar.archivePath)
+    }
+    with jar
+}
+fatJar.dependsOn (project(':modules').subprojects.findAll { it.name != "sample" }.assemble)
+fatJar.dependsOn (project(':apps').subprojects.findAll { it.name != "sample" }.assemble)
+
+build.dependsOn fatJar
+distTar.dependsOn fatJar
+distZip.dependsOn fatJar
 // build.dependsOn project(':apps:voxella-launcher-app').tasks['launch4j']
 
 distZip {
@@ -36,7 +58,7 @@ distributions {
             include 'readme.txt'
 
             into('') {
-                from project(':apps:voxella-launcher-app').fatJar.archivePath
+                from fatJar.archivePath
                 include '*'
                 rename { filename -> "voxella-launcher.jar" }
             }

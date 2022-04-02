@@ -65,23 +65,6 @@ jar {
     }
 }
 
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': mainClass
-    }
-
-    archiveBaseName = 'voxella-launcher-fat'
-    from {
-        duplicatesStrategy = 'exclude'
-        configurations.runtimeClasspath.collect {
-        	it.isDirectory() ? it : zipTree(it).matching {
-        		exclude '/LICENSE.txt'
-        	}
-        }
-    }
-    with jar
-}
-
 //import proguard.gradle.*
 //
 //task proguardJar(type: proguard.gradle.ProGuardTask) {
@@ -90,5 +73,3 @@ task fatJar(type: Jar) {
 //     outjars "build/libs/bined-editor-basic-proguard-${version}.jar"
 //}
 //proguardJar.dependsOn fatJar
-
-fatJar.dependsOn jar
