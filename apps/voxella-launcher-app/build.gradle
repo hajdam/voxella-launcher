@@ -92,14 +92,3 @@ task fatJar(type: Jar) {
 //proguardJar.dependsOn fatJar
 
 fatJar.dependsOn jar
-
-distributions {
-    main {
-        contents {
-            into('') {
-                from project.jar.archivePath
-                include '*'
-            }
-        }
-    }
-}

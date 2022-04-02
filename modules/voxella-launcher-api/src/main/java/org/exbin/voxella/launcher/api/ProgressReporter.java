@@ -25,7 +25,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public interface ProgressReporter {
 
-    ProgressListener startOperation(String operationTitle);
+    ProgressListener startOperation(String operationTitle, CancellableOperation cancellableOperation);
 
     void endOperation(ProgressListener listener);
 
@@ -36,5 +36,10 @@ public interface ProgressReporter {
         void update(int progress);
 
         boolean isCancelled();
+    }
+    
+    public enum CancellableOperation {
+        NON_CANCELLABLE,
+        CANCELLABLE
     }
 }

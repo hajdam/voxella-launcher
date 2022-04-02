@@ -16,6 +16,7 @@
 package org.exbin.voxella.launcher.gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -30,6 +31,7 @@ public class OperationProgressPanel extends javax.swing.JPanel {
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/gui/resources/OperationProgressPanel");
 
     private boolean cancellable = false;
+    private ActionListener cancelAction;
 
     public OperationProgressPanel() {
         initComponents();
@@ -49,6 +51,10 @@ public class OperationProgressPanel extends javax.swing.JPanel {
             }
             invalidate();
         }
+    }
+
+    public void setCancelAction(ActionListener cancelAction) {
+        this.cancelAction = cancelAction;
     }
 
     public void setProgress(int progress) {
@@ -74,6 +80,11 @@ public class OperationProgressPanel extends javax.swing.JPanel {
         operationProgressBar = new javax.swing.JProgressBar();
 
         cancelButton.setText(resourceBundle.getString("cancelButton.text")); // NOI18N
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout cancelPanelLayout = new javax.swing.GroupLayout(cancelPanel);
         cancelPanel.setLayout(cancelPanelLayout);
@@ -116,6 +127,12 @@ public class OperationProgressPanel extends javax.swing.JPanel {
 
         add(progressBarPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        if (cancelAction != null) {
+            cancelAction.actionPerformed(evt);
+        }
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

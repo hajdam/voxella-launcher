@@ -30,6 +30,9 @@
               <ResourceString bundle="org/exbin/voxella/launcher/gui/resources/CheckForUpdatePanel.properties" key="cancelButton.text" replaceFormat="resourceBundle.getString(&quot;{key}&quot;)"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

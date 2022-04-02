@@ -17,6 +17,7 @@ package org.exbin.voxella.launcher.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -25,15 +26,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.Action;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
-import org.exbin.voxella.launcher.api.ProgressReporter;
-import org.exbin.voxella.launcher.game.terasology.TerasologyGameController;
-import org.exbin.voxella.launcher.game.terasology.TerasologyGameComponent;
-import org.exbin.voxella.launcher.game.terasology.TerasologyGameOptionsComponent;
 import org.exbin.voxella.launcher.model.BasicGameRecord;
 
 /**
@@ -50,10 +46,8 @@ public class GameListPanel extends javax.swing.JPanel {
     private Action optionsAction;
     private Action launchAction;
     private JComponent activeComponent;
-    private final TerasologyGameController terasologyGameController;
 
     public GameListPanel() {
-        terasologyGameController = new TerasologyGameController("Terasology-latest");
         initComponents();
         init();
     }
@@ -91,12 +85,11 @@ public class GameListPanel extends javax.swing.JPanel {
                 updateState();
             }
         });
+    }
 
+    public void setGameRecords(List<BasicGameRecord> records) {
         DefaultListModel<BasicGameRecord> gameRecordsModel = new DefaultListModel<>();
-        ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource("/org/exbin/voxella/launcher/game/terasology/resources/gooey_star_48.png"));
-        BasicGameRecord record = new BasicGameRecord("Terasology Test", terasologyGameController, new TerasologyGameComponent(), icon);
-        record.setOptionsComponent(new TerasologyGameOptionsComponent());
-        gameRecordsModel.addElement(record);
+        gameRecordsModel.addAll(records);
         gamesList.setModel(gameRecordsModel);
         gamesList.setSelectedIndex(0);
     }
@@ -107,10 +100,6 @@ public class GameListPanel extends javax.swing.JPanel {
 
     public void setLaunchAction(Action launchAction) {
         this.launchAction = launchAction;
-    }
-
-    public void setProgressReporter(ProgressReporter progressReporter) {
-        terasologyGameController.setProgressReporter(progressReporter);
     }
 
     @Nonnull
@@ -257,7 +246,7 @@ public class GameListPanel extends javax.swing.JPanel {
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterTextField;
     private javax.swing.JPanel gameInfoPanel;
-    private javax.swing.JList<BasicGameRecord> gamesList;
+    private javax.swing.JList<org.exbin.voxella.launcher.model.BasicGameRecord> gamesList;
     private javax.swing.JScrollPane gamesListScrollPane;
     private javax.swing.JButton launchButton;
     private javax.swing.JLabel noGameSelectedLabel;

@@ -47,6 +47,7 @@ public class TerasologyGameController implements GameController {
     private VoxellaLauncher launcher;
     private ProgressReporter progressReporter;
     private String gameDirName;
+    private String engineVersion = "5.2.0";
 
     public TerasologyGameController(String gameDirName) {
         this.gameDirName = gameDirName;
@@ -84,7 +85,7 @@ public class TerasologyGameController implements GameController {
     public void performDownload() throws DownloadException {
         try {
             File gameDirectory = getGameDirectory();
-            URL downloadUrl = new URL("https://github.com/MovingBlocks/Terasology/releases/download/v5.2.0/TerasologyOmega.zip");
+            URL downloadUrl = new URL("https://github.com/MovingBlocks/Terasology/releases/download/v" + engineVersion + "/TerasologyOmega.zip");
             final long contentLength = DownloadUtils.getContentLength(downloadUrl);
             final long availableSpace = gameDirectory.getParentFile().getUsableSpace();
 
@@ -94,7 +95,7 @@ public class TerasologyGameController implements GameController {
 
             final Path gameZip = gameDirectory.toPath().resolve("TerasologyOmega.zip");
             Files.deleteIfExists(gameZip);
-            ProgressListener progressListener = progressReporter.startOperation("Downloading game file");
+            ProgressListener progressListener = progressReporter.startOperation("Downloading game file", ProgressReporter.CancellableOperation.CANCELLABLE);
             boolean fileDownloaded = false;
             try {
                 DownloadUtils.downloadToFile(downloadUrl, gameZip, progressListener).get();
@@ -107,7 +108,7 @@ public class TerasologyGameController implements GameController {
             }
 
             if (fileDownloaded) {
-                ProgressListener extractProgressListener = progressReporter.startOperation("Extracting game file");
+                ProgressListener extractProgressListener = progressReporter.startOperation("Extracting game file", ProgressReporter.CancellableOperation.NON_CANCELLABLE);
                 try {
                     FileUtils.extractZipTo(gameZip, gameDirectory.toPath());
                     Files.deleteIfExists(gameZip);
@@ -145,7 +146,13 @@ public class TerasologyGameController implements GameController {
     }
 
     public boolean gameExists() {
-        return getGameDirectory().exists();
+        File gameDirectory = getGameDirectory();
+        return gameDirectory.exists() && new File(gameDirectory, "libs/engine-" + engineVersion + ".jar").exists();
+    }
+
+    @Nonnull
+    public String getEngineVersion() {
+        return engineVersion;
     }
 
     @Nonnull

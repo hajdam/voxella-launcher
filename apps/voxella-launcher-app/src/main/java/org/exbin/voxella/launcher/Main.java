@@ -48,6 +48,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.exbin.voxella.launcher.api.GameController;
 import org.exbin.voxella.launcher.api.ProgressReporter;
 import org.exbin.voxella.launcher.api.ProgressReporter.ProgressListener;
+import org.exbin.voxella.launcher.game.terasology.TerasologyGameComponent;
+import org.exbin.voxella.launcher.game.terasology.TerasologyGameController;
+import org.exbin.voxella.launcher.game.terasology.TerasologyGameOptionsComponent;
 import org.exbin.voxella.launcher.gui.AboutPanel;
 import org.exbin.voxella.launcher.gui.GameListPanel;
 import org.exbin.voxella.launcher.gui.LauncherPanel;
@@ -133,6 +136,18 @@ public class Main {
             final LauncherPanel mainPanel = new LauncherPanel();
 
             GameListPanel gameListPanel = new GameListPanel();
+            TerasologyGameController gameController = new TerasologyGameController("Terasology-latest");
+            ImageIcon terasologyGameIcon = new javax.swing.ImageIcon(launcher.getClass().getResource("/org/exbin/voxella/launcher/game/terasology/resources/gooey_star_48.png"));
+            TerasologyGameComponent component = new TerasologyGameComponent();
+            BasicGameRecord gameRecord = new BasicGameRecord("Terasology Test", gameController, component, terasologyGameIcon);
+            gameRecord.setVersion(gameController.getEngineVersion());
+            component.setGameRecord(gameRecord);
+            gameRecord.setOptionsComponent(new TerasologyGameOptionsComponent());
+            gameController.attachLauncher(launcher);
+            List<BasicGameRecord> gameRecords = new ArrayList<>();
+            gameRecords.add(gameRecord);
+            gameListPanel.setGameRecords(gameRecords);
+
             gameListPanel.setOptionsAction(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -280,28 +295,19 @@ public class Main {
             mainPanel.setUserStatusPanel(userStatusPanel);
 
             OperationProgressPanel checkForUdatePanel = new OperationProgressPanel();
-            gameListPanel.setProgressReporter(new ProgressReporter() {
+            gameController.setProgressReporter(new ProgressReporter() {
                 @Override
-                public ProgressListener startOperation(String operationTitle) {
+                public ProgressListener startOperation(String operationTitle, ProgressReporter.CancellableOperation cancellableOperation) {
                     checkForUdatePanel.setProgressText(operationTitle);
-                    checkForUdatePanel.setCancellable(false);
+                    checkForUdatePanel.setCancellable(cancellableOperation == CancellableOperation.CANCELLABLE);
                     checkForUdatePanel.setProgress(0);
                     mainPanel.setProgressStatusPanel(checkForUdatePanel);
-                    return new ProgressListener() {
-                        @Override
-                        public void update() {
-                        }
+                    final CancellableProgressListener listener = new CancellableProgressListener(checkForUdatePanel);
+                    checkForUdatePanel.setCancelAction((e) -> {
+                        listener.cancel();
+                    });
 
-                        @Override
-                        public void update(int progress) {
-                            checkForUdatePanel.setProgress(progress * 10);
-                        }
-
-                        @Override
-                        public boolean isCancelled() {
-                            return false;
-                        }
-                    };
+                    return listener;
                 }
 
                 @Override
@@ -352,6 +358,34 @@ public class Main {
             DefaultPopupMenu.updateUI();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Look and feel switching failed", ex);
+        }
+    }
+
+    private static class CancellableProgressListener implements ProgressListener {
+
+        private boolean cancelled = false;
+        private final OperationProgressPanel checkForUdatePanel;
+
+        public CancellableProgressListener(OperationProgressPanel checkForUdatePanel) {
+            this.checkForUdatePanel = checkForUdatePanel;
+        }
+
+        void cancel() {
+            cancelled = true;
+        }
+
+        @Override
+        public void update() {
+        }
+
+        @Override
+        public void update(int progress) {
+            checkForUdatePanel.setProgress(progress * 10);
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
         }
     }
 }

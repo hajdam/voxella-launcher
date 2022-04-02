@@ -253,7 +253,7 @@ public class TerasologyGameComponent extends JComponent {
         add(tabbedPane);
     }
 
-    public void setGameRecord(GameRecord gameRecord) {
+    public void setGameRecord(@Nullable GameRecord gameRecord) {
         this.gameRecord = gameRecord;
         gameVersion = resourceBundle.getString("version.prefix") + (gameRecord != null ? gameRecord.getVersion() : resourceBundle.getString("version.unknown"));
     }
