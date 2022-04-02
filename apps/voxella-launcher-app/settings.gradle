@@ -1,0 +1,10 @@
+rootProject.name = 'voxella-launcher-app'
+
+if (rootProject.path == ':') {
+    include ':modules:voxella-launcher-api'
+    include ':modules:game-terasology-component'
+    include ':modules:game-terasology-controller'
+    include ':modules:voxella-launcher-lang-cs'
+}
+
+apply from: '../apps-settings.gradle'

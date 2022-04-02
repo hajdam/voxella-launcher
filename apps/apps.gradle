@@ -1,0 +1,61 @@
+// Shared apps build
+
+version = '0.1.0-SNAPSHOT'
+
+import org.gradle.util.VersionNumber
+
+sourceCompatibility = '1.8'
+
+targetCompatibility = '1.8'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    doFirst {
+        options.fork = true
+        if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+            if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
+                options.bootstrapClasspath = files("${System.properties['java.home']}/lib/rt.jar", "$File.pathSeparator${System.properties['java.home']}/jre/lib/jsse.jar")
+            } else {
+                options.bootClasspath = "${System.properties['java.home']}/lib/rt.jar"
+                options.bootClasspath += "$File.pathSeparator${System.properties['java.home']}/jre/lib/jsse.jar"
+            }
+        }
+    }
+}
+
+// Disable tests on build
+if (!gradle.startParameter.taskNames.any {it.endsWith("test")}) {
+    tasks.withType(Test) {enabled = false}
+}
+
+task testJar(type: Jar, dependsOn: testClasses) {
+    classifier "tests"
+    archiveBaseName = "test-${project.archivesBaseName}"
+    from sourceSets.test.output
+}
+
+configurations {
+    tests
+}
+
+artifacts {
+    tests testJar
+}
+
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.java
+}
+
+javadoc {
+    if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+task javadocJar (type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}

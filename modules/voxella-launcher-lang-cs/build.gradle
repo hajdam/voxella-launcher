@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+apply from: '../modules.gradle'
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = ''
+}
+
+repositories {
+    flatDir {
+        dirs "../../lib"
+    }
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    testImplementation group : 'junit', name: 'junit', version: '4.10'
+}

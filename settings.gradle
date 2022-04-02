@@ -1,2 +1,8 @@
 rootProject.name = 'voxella-launcher'
 
+include ":modules:voxella-launcher-api"
+include ":modules:game-terasology-controller"
+include ":modules:game-terasology-component"
+include ":modules:voxella-launcher-lang-cs"
+
+include ":apps:voxella-launcher-app"

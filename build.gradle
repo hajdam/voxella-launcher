@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'base'
     id 'distribution'
     id 'maven-publish'
     id 'edu.sc.seis.launch4j' version '2.5.1'
@@ -9,135 +9,12 @@ import org.gradle.util.VersionNumber
 
 version = '0.1.0-SNAPSHOT'
 
-sourceCompatibility = '1.8'
+subprojects.each { subproject -> evaluationDependsOn(subproject.path) }
 
-targetCompatibility = '1.8'
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    doFirst {
-        options.fork = true
-        if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
-            if (VersionNumber.parse(gradle.gradleVersion) >= VersionNumber.parse('5.0')) {
-                options.bootstrapClasspath = files("${System.properties['java.home']}/lib/rt.jar", "$File.pathSeparator${System.properties['java.home']}/jre/lib/jsse.jar")
-            } else {
-                options.bootClasspath = "${System.properties['java.home']}/lib/rt.jar"
-                options.bootClasspath += "$File.pathSeparator${System.properties['java.home']}/jre/lib/jsse.jar"
-            }
-        }
-    }
+publish.dependsOn {
+    project(':modules').subprojects.publish
 }
 
-// Disable tests on build
-if (!gradle.startParameter.taskNames.any {it.endsWith("test")}) {
-    tasks.withType(Test) {enabled = false}
-}
+distZip.dependsOn (project(':apps').subprojects.findAll { it.name != "sample" }.assemble)
+distTar.dependsOn (project(':apps').subprojects.findAll { it.name != "sample" }.assemble)
 
-task testJar(type: Jar, dependsOn: testClasses) {
-    classifier "tests"
-    archiveBaseName = "test-${project.archivesBaseName}"
-    from sourceSets.test.output
-}
-
-configurations {
-    tests
-}
-
-artifacts {
-    tests testJar
-}
-
-if (!hasProperty('mainClass')) {
-    ext.mainClass = 'org.exbin.voxella.launcher.Main'
-    ext.appArgs = '-dev'
-}
-
-def configureExec(task) {
-    task.mainClass = mainClass
-    task.classpath = sourceSets.main.runtimeClasspath
-    if (hasProperty('appArgs')) {
-        task.args appArgs
-    }
-}
-
-task run(type: JavaExec) {
-    task -> configureExec(task)
-}
-
-task debug(type: JavaExec) {
-    task -> configureExec(task)
-    debug = true
-}
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    flatDir {
-        dirs "../../lib"
-    }
-}
-
-dependencies {
-    implementation 'com.formdev:flatlaf:2.0.1'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-    implementation group: 'com.vdurmont', name: 'semver4j', version: '3.1.0'
-    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-    testImplementation group: 'junit', name: 'junit', version: '4.10'
-}
-
-launch4j {
-    outfile = "voxella-launcher.exe"
-    icon = "images/icon.ico"
-    mainClassName = 'org.exbin.voxella.launcher.Main'
-}
-
-jar {
-//    from configurations.compile.findAll { it.name == 'json-simple-1.1.1.jar' }.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest {
-        attributes(
-            'Main-Class': mainClass
-        )
-    }
-}
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': mainClass
-    }
-
-    archiveBaseName = 'voxella-launcher-fat'
-    from {
-        duplicatesStrategy = 'exclude'
-        configurations.runtimeClasspath.collect {
-        	it.isDirectory() ? it : zipTree(it).matching {
-        		exclude '/LICENSE.txt'
-        	}
-        }
-    }
-    with jar
-}
-
-//import proguard.gradle.*
-//
-//task proguardJar(type: proguard.gradle.ProGuardTask) {
-//     libraryjars "${System.properties['java.home']}/jre/lib/rt.jar"
-//     injars "build/libs/bined-editor-basic-standalone-${version}.jar"
-//     outjars "build/libs/bined-editor-basic-proguard-${version}.jar"
-//}
-//proguardJar.dependsOn fatJar
-
-build.dependsOn fatJar
-
-distributions {
-    main {
-        contents {
-            into('') {
-                from project.jar.archivePath
-                include '*'
-            }
-        }
-    }
-}

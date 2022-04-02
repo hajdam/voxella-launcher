@@ -1,0 +1,6 @@
+rootProject.name = 'voxella-launcher-api'
+
+if (rootProject.path == ':') {
+}
+
+apply from: '../modules-settings.gradle'

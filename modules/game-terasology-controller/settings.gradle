@@ -1,0 +1,7 @@
+rootProject.name = 'game-terasology-controller'
+
+if (rootProject.path == ':') {
+    include ':modules:voxella-launcher-api'
+}
+
+apply from: '../modules-settings.gradle'

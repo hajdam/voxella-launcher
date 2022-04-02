@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+group = 'org.exbin.framework'
+ext.libraryName = 'ExBin Framework Core Library'
+ext.libraryDescription = 'Library for core functionality in ExBin Framework'
+
+apply from: '../modules.gradle'
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = ''
+}
+
+repositories {
+    flatDir {
+        dirs "../../lib"
+    }
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+//    api moduleDep('ExbinFrameworkJava', 'org.exbin.framework', 'exbin-framework-api')
+//    api moduleDep('ExbinFrameworkJava', 'org.exbin.framework', 'exbin-framework-utils')
+//    implementation 'commons-cli:commons-cli:1.2'
+    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    testImplementation group : 'junit', name: 'junit', version: '4.10'
+}
