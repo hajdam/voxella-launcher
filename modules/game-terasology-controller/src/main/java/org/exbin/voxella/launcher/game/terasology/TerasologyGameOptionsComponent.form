@@ -29,7 +29,7 @@
         <Container class="javax.swing.JPanel" name="mainPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Main">
+              <JTabbedPaneConstraints tabName="&lt;mainPanel.tabTitle&gt;">
                 <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/exbin/voxella/launcher/game/terasology/resources/TerasologyGameOptionsComponent.properties" key="mainPanel.tabTitle" replaceFormat="resourceBundle.getString(&quot;{key}&quot;)"/>
                 </Property>
@@ -141,7 +141,7 @@
         <Container class="javax.swing.JPanel" name="advancedPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Advanced">
+              <JTabbedPaneConstraints tabName="&lt;advancedPanel.tabTitle&gt;">
                 <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="org/exbin/voxella/launcher/game/terasology/resources/TerasologyGameOptionsComponent.properties" key="advancedPanel.tabTitle" replaceFormat="resourceBundle.getString(&quot;{key}&quot;)"/>
                 </Property>

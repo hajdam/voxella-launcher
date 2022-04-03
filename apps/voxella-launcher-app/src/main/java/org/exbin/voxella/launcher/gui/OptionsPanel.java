@@ -228,7 +228,7 @@ public class OptionsPanel extends javax.swing.JPanel {
 
         startWithLabel.setText(resourceBundle.getString("startWithLabel.text")); // NOI18N
 
-        checkForUpdatesButton.setText("Check for Updates");
+        checkForUpdatesButton.setText(resourceBundle.getString("checkFrUpdatesButton.text")); // NOI18N
         checkForUpdatesButton.setEnabled(false);
         checkForUpdatesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -236,7 +236,7 @@ public class OptionsPanel extends javax.swing.JPanel {
             }
         });
 
-        logsButton.setText("Logs...");
+        logsButton.setText(resourceBundle.getString("logsButton.text")); // NOI18N
         logsButton.setEnabled(false);
         logsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

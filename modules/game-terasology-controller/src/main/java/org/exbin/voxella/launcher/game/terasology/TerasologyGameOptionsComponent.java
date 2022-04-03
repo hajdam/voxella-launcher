@@ -24,6 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
+import org.exbin.voxella.launcher.game.terasology.JavaHeapSize;
 
 /**
  * Options component.

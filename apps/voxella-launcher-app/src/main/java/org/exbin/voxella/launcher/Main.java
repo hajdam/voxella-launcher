@@ -82,9 +82,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
-        String applicationName = resourceBundle.getString("Application.name");
-        String applicationVersion = resourceBundle.getString("Application.version");
+        ResourceBundle primaryBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher", Locale.ENGLISH);
+        String applicationName = primaryBundle.getString("Application.name");
+        String applicationVersion = primaryBundle.getString("Application.version");
 
         final MainLauncher launcher = MainLauncher.getInstance();
         launcher.startLogging(applicationName, applicationVersion);
@@ -110,9 +110,10 @@ public class Main {
 
         String language = settings.get(MainLauncher.PREFERENCES_LANGUAGE, "");
         if (!language.isEmpty()) {
-            Locale locale = new Locale(language);
+            Locale locale = Locale.forLanguageTag(language);
             Locale.setDefault(locale);
         }
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("org/exbin/voxella/launcher/resources/Launcher");
 
         final String defaultThemeClass = "com.formdev.flatlaf.FlatDarkLaf";
         String themeClass = settings.get(MainLauncher.PREFERENCES_THEME, defaultThemeClass);

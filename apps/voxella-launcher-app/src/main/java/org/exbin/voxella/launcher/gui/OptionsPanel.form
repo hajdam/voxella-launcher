@@ -152,7 +152,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="checkForUpdatesButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Check for Updates"/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/exbin/voxella/launcher/gui/resources/OptionsPanel.properties" key="checkFrUpdatesButton.text" replaceFormat="resourceBundle.getString(&quot;{key}&quot;)"/>
+            </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
@@ -161,7 +163,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="logsButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Logs..."/>
+            <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/exbin/voxella/launcher/gui/resources/OptionsPanel.properties" key="logsButton.text" replaceFormat="resourceBundle.getString(&quot;{key}&quot;)"/>
+            </Property>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>

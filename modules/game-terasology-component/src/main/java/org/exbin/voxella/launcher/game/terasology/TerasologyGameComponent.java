@@ -194,14 +194,7 @@ public class TerasologyGameComponent extends JComponent {
         aboutText.setEditorKit(JEditorPane.createEditorKitForContentType(""));
         aboutText.setEditable(false);
         aboutText.setContentType("text/html");
-        aboutText.setText("<html><body><h2><i>An open source voxel world - imagine the possibilities!</i></h2>\n"
-                + "<p>The Terasology project was born from a Minecraft-inspired tech\n"
-                + "demo and is becoming a stable platform for various types of gameplay\n"
-                + "settings in a voxel world. The creators and maintainers are a diverse\n"
-                + "mix of software developers, designers, game testers, graphic artists,\n"
-                + "and musicians. We encourage others to join!</p>\n"
-                + "<p><a href=\"https://terasology.org/about.html\">More...</a></p>\n"
-                + "</body></html>");
+        aboutText.setText(resourceBundle.getString("aboutText.text"));
         aboutText.setOpaque(false);
         aboutText.addHyperlinkListener((HyperlinkEvent e) -> {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
