@@ -277,10 +277,7 @@ public class TerasologyGameComponent extends JComponent {
 
 //        g.translate(10, logoImageSize.height + 30);
         Graphics gWrapper = getComponentGraphics(g);
-//        paintComponents(gWrapper);
         super.paint(gWrapper);
-//        tabbedPane.paint(gWrapper);
-//        tabbedPane.paintAll(gWrapper);
     }
 
     private void paintBgImage(Graphics g, Dimension size, int bgX, int bgY) {

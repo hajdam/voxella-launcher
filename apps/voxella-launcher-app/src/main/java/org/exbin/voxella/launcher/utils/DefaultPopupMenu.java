@@ -385,8 +385,8 @@ public class DefaultPopupMenu {
         }
 
         private void activateMousePopup(MouseEvent mouseEvent, Component component, ClipboardActionsHandler clipboardHandler) {
-            for (Object action : defaultTextActions) {
-                ((DefaultPopupClipboardAction) action).setClipboardHandler(clipboardHandler);
+            for (DefaultPopupClipboardAction action : defaultTextActions) {
+                action.setClipboardHandler(clipboardHandler);
             }
 
             Point point = mouseEvent.getLocationOnScreen();
@@ -396,9 +396,9 @@ public class DefaultPopupMenu {
             showPopupMenu(component, point, clipboardHandler.isEditable());
         }
 
-        private void activateKeyPopup(Component component, Point point, ClipboardActionsHandler clipboardHandler) {
-            for (Object action : defaultTextActions) {
-                ((DefaultPopupClipboardAction) action).setClipboardHandler(clipboardHandler);
+        private void activateKeyPopup(Component component, @Nullable Point point, ClipboardActionsHandler clipboardHandler) {
+            for (DefaultPopupClipboardAction action : defaultTextActions) {
+                action.setClipboardHandler(clipboardHandler);
             }
 
             if (point == null) {
