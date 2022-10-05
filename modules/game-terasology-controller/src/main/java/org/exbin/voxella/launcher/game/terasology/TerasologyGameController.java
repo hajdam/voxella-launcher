@@ -47,7 +47,7 @@ public class TerasologyGameController implements GameController {
     private VoxellaLauncher launcher;
     private ProgressReporter progressReporter;
     private String gameDirName;
-    private String engineVersion = "5.2.0";
+    private String engineVersion = "5.3.0";
 
     public TerasologyGameController(String gameDirName) {
         this.gameDirName = gameDirName;

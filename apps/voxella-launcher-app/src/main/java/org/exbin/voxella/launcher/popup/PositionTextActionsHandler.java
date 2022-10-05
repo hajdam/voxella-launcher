@@ -13,34 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.voxella.launcher.utils;
+package org.exbin.voxella.launcher.popup;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.Point;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for popup event trigger dispatcher.
+ * Interface for text handler for visual component / context menu.
  *
- * @version 0.2.0 2016/08/09
  * @author ExBin Project (http://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface ComponentPopupEventDispatcher {
+public interface PositionTextActionsHandler {
 
     /**
-     * Processes event for popup trigger actions.
+     * Performs copy text on given relative position to clipboard operation.
      *
-     * @param mouseEvent mouse event
-     * @return true if event was processed
+     * @param locationOnScreen location on screen
      */
-    boolean dispatchMouseEvent(MouseEvent mouseEvent);
+    void performCopyText(Point locationOnScreen);
 
     /**
-     * Processes event for popup trigger actions.
+     * Returns if true if text is selected on given relative position.
      *
-     * @param keyEvent key event
-     * @return true if event was processed
+     * @param locationOnScreen location on screen
+     * @return true if image is selected
      */
-    boolean dispatchKeyEvent(KeyEvent keyEvent);
+    boolean isTextSelected(Point locationOnScreen);
 }

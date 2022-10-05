@@ -13,34 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.voxella.launcher.utils;
+package org.exbin.voxella.launcher.popup;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.Point;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for popup event trigger dispatcher.
+ * Interface for link handler for visual component / context menu.
  *
- * @version 0.2.0 2016/08/09
  * @author ExBin Project (http://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface ComponentPopupEventDispatcher {
+public interface PositionLinkActionsHandler {
 
     /**
-     * Processes event for popup trigger actions.
+     * Performs copy link on given relative position to clipboard operation.
      *
-     * @param mouseEvent mouse event
-     * @return true if event was processed
+     * @param locationOnScreen location on screen
      */
-    boolean dispatchMouseEvent(MouseEvent mouseEvent);
+    void performCopyLink(Point locationOnScreen);
 
     /**
-     * Processes event for popup trigger actions.
+     * Opens link on given relative position using default browser.
      *
-     * @param keyEvent key event
-     * @return true if event was processed
+     * @param locationOnScreen location on screen
      */
-    boolean dispatchKeyEvent(KeyEvent keyEvent);
+    void performOpenLink(Point locationOnScreen);
+
+    /**
+     * Returns if true if link is selected on given relative position.
+     *
+     * @param locationOnScreen location on screen
+     * @return true if link is selected
+     */
+    boolean isLinkSelected(Point locationOnScreen);
 }

@@ -13,18 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.voxella.launcher.utils;
+package org.exbin.voxella.launcher.popup;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Clipboard actions update listener.
+ * Interface for text handler for visual component / context menu.
  *
- * @version 0.2.0 2016/01/24
  * @author ExBin Project (http://exbin.org)
  */
-public interface ClipboardActionsUpdateListener {
+@ParametersAreNonnullByDefault
+public interface TextActionsHandler {
 
     /**
-     * Notify about change in undo state.
+     * Performs copy text to clipboard operation.
      */
-    void stateChanged();
+    void performCopyText();
+
+    /**
+     * Returns if true if text is selected.
+     *
+     * @return true if text is selected
+     */
+    boolean isTextSelected();
 }

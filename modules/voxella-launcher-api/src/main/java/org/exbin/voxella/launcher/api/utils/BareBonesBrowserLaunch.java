@@ -74,64 +74,58 @@ public class BareBonesBrowserLaunch {
     }
 
     public static void openDesktopURL(final String url) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        try {
-                            java.net.URI uri = new java.net.URI(url);
-                            desktop.browse(uri);
-                            return;
-                        } catch (IOException | URISyntaxException ex) {
-                            Logger.getLogger(BareBonesBrowserLaunch.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+        java.awt.EventQueue.invokeLater(() -> {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        java.net.URI uri = new java.net.URI(url);
+                        desktop.browse(uri);
+                        return;
+                    } catch (IOException | URISyntaxException ex) {
+                        Logger.getLogger(BareBonesBrowserLaunch.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
-                BareBonesBrowserLaunch.openURL(url);
             }
+
+            BareBonesBrowserLaunch.openURL(url);
         });
     }
 
     public static void openDesktopURL(final URI uri) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        try {
-                            desktop.browse(uri);
-                            return;
-                        } catch (IOException ex) {
-                            Logger.getLogger(BareBonesBrowserLaunch.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+        java.awt.EventQueue.invokeLater(() -> {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        desktop.browse(uri);
+                        return;
+                    } catch (IOException ex) {
+                        Logger.getLogger(BareBonesBrowserLaunch.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
-                BareBonesBrowserLaunch.openURL(uri.toString());
             }
+
+            BareBonesBrowserLaunch.openURL(uri.toString());
         });
     }
 
     public static void openDesktopURL(final URL url) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                if (Desktop.isDesktopSupported()) {
-                    Desktop desktop = Desktop.getDesktop();
-                    if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                        try {
-                            java.net.URI uri = url.toURI();
-                            desktop.browse(uri);
-                            return;
-                        } catch (IOException | URISyntaxException ex) {
-                            Logger.getLogger(BareBonesBrowserLaunch.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+        java.awt.EventQueue.invokeLater(() -> {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    try {
+                        java.net.URI uri = url.toURI();
+                        desktop.browse(uri);
+                        return;
+                    } catch (IOException | URISyntaxException ex) {
+                        Logger.getLogger(BareBonesBrowserLaunch.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
-                BareBonesBrowserLaunch.openURL(url.toString());
             }
+
+            BareBonesBrowserLaunch.openURL(url.toString());
         });
     }
 }

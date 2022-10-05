@@ -62,9 +62,8 @@ import org.exbin.voxella.launcher.model.BasicGameRecord;
 import org.exbin.voxella.launcher.model.LanguageRecord;
 import org.exbin.voxella.launcher.model.StartWithMode;
 import org.exbin.voxella.launcher.model.ThemeRecord;
+import org.exbin.voxella.launcher.popup.DefaultPopupMenu;
 import org.exbin.voxella.launcher.preferences.Preferences;
-import org.exbin.voxella.launcher.utils.ClipboardUtils;
-import org.exbin.voxella.launcher.utils.DefaultPopupMenu;
 import org.exbin.voxella.launcher.utils.WindowUtils;
 import org.exbin.voxella.launcher.utils.gui.CloseControlPanel;
 
@@ -124,7 +123,7 @@ public class Main {
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Failed to initialize LaF", ex);
         }
-        ClipboardUtils.registerDefaultClipboardPopupMenu();
+        DefaultPopupMenu.register();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {

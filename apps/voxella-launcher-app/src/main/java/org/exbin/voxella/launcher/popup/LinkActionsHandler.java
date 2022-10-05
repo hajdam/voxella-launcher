@@ -13,18 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.voxella.launcher.utils;
+package org.exbin.voxella.launcher.popup;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Clipboard actions update listener.
+ * Interface for link handler for visual component / context menu.
  *
- * @version 0.2.0 2016/01/24
  * @author ExBin Project (http://exbin.org)
  */
-public interface ClipboardActionsUpdateListener {
+@ParametersAreNonnullByDefault
+public interface LinkActionsHandler {
 
     /**
-     * Notify about change in undo state.
+     * Performs copy link to clipboard operation.
      */
-    void stateChanged();
+    void performCopyLink();
+
+    /**
+     * Opens link using default browser.
+     */
+    void performOpenLink();
+
+    /**
+     * Returns if true if link is selected.
+     *
+     * @return true if link is selected
+     */
+    boolean isLinkSelected();
 }

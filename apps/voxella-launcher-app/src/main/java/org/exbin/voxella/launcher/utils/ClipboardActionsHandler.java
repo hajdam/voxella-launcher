@@ -20,7 +20,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /**
  * Interface for clipboard handler for visual component / context menu.
  *
- * @author Voxella Project
+ * @version 0.2.1 2020/07/24
+ * @author ExBin Project (http://exbin.org)
  */
 @ParametersAreNonnullByDefault
 public interface ClipboardActionsHandler {

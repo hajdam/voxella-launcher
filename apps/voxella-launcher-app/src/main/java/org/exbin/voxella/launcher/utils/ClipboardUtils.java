@@ -15,17 +15,22 @@
  */
 package org.exbin.voxella.launcher.utils;
 
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.util.ResourceBundle;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.JPopupMenu;
 
 /**
- * Clipboard utility methods.
+ * Clipboard utility methods
  *
- * @author Voxella Project
+ * @version 0.2.1 2019/07/18
+ * @author ExBin Project (http://exbin.org)
  */
 @ParametersAreNonnullByDefault
 public class ClipboardUtils {
@@ -53,26 +58,52 @@ public class ClipboardUtils {
         return clipboard;
     }
 
-    /**
-     * Registers popup menu show for various supported components accross all
-     * AWT popup menu events.
-     */
-    public static void registerDefaultClipboardPopupMenu() {
-        DefaultPopupMenu.register();
+    public static void pasteImage(Image image) {
+        TransferableImage trans = new TransferableImage(image);
+        ClipboardUtils.getClipboard().setContents(trans, trans);
     }
 
-    /**
-     * Registers popup menu show for various supported components accross all
-     * AWT popup menu events.
-     *
-     * @param resourceBundle resource bundle
-     * @param resourceClass resource class
-     */
-    public static void registerDefaultClipboardPopupMenu(ResourceBundle resourceBundle, Class resourceClass) {
-        DefaultPopupMenu.register(resourceBundle, resourceClass);
-    }
+    @ParametersAreNonnullByDefault
+    private static class TransferableImage implements Transferable, ClipboardOwner {
 
-    public static void fillDefaultEditPopupMenu(JPopupMenu popupMenu, int position) {
-        DefaultPopupMenu.getInstance().fillDefaultEditPopupMenu(popupMenu, position);
+        Image image;
+
+        public TransferableImage(Image image) {
+            this.image = image;
+        }
+
+        @Override
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+            if (flavor.equals(DataFlavor.imageFlavor) && image != null) {
+                return image;
+            } else {
+                throw new UnsupportedFlavorException(flavor);
+            }
+        }
+
+        @Nonnull
+        @Override
+        public DataFlavor[] getTransferDataFlavors() {
+            DataFlavor[] flavors = new DataFlavor[1];
+            flavors[0] = DataFlavor.imageFlavor;
+            return flavors;
+        }
+
+        @Override
+        public boolean isDataFlavorSupported(DataFlavor flavor) {
+            DataFlavor[] flavors = getTransferDataFlavors();
+            for (DataFlavor flavor1 : flavors) {
+                if (flavor.equals(flavor1)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        @Override
+        public void lostOwnership(Clipboard clipboard, Transferable contents) {
+            // ignore
+        }
     }
 }
