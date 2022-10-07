@@ -18,6 +18,7 @@ package org.exbin.voxella.launcher.api;
 import java.io.File;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JPopupMenu;
 
 /**
  * Launcher interface.
@@ -29,4 +30,7 @@ public interface VoxellaLauncher {
 
     @Nonnull
     File getWorkDir();
+
+    @Nonnull
+    JPopupMenu createLinkPopupMenu(String uri);
 }

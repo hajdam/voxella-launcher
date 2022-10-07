@@ -109,6 +109,11 @@ public class DefaultPopupMenu {
 
         return instance;
     }
+    
+    @Nonnull
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle;
+    }
 
     /**
      * Registers default popup menu to AWT.

@@ -38,13 +38,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import org.exbin.voxella.launcher.api.GameRecord;
-import org.exbin.voxella.launcher.api.utils.BareBonesBrowserLaunch;
+import org.exbin.voxella.launcher.api.VoxellaLauncher;
+import org.exbin.voxella.launcher.api.utils.DesktopUtils;
 import org.exbin.voxella.launcher.api.utils.UiUtils;
 
 /**
@@ -69,12 +71,13 @@ public class TerasologyGameComponent extends JComponent {
 
     private final ImageObserver emptyObserver = (Image img, int infoflags, int x, int y, int width, int height) -> false;
     private final Map<AffiliateLink, Image> affiliateImages = new HashMap<>();
-    private final Map<AffiliateLink, String> affiliateToolTip = new HashMap<>();
-    private final Map<AffiliateLink, String> affiliateUrl = new HashMap<>();
+    private final Map<AffiliateLink, String> affiliateToolTips = new HashMap<>();
+    private final Map<AffiliateLink, String> affiliateUrls = new HashMap<>();
     private final String headerUrl;
     private final String headerToolTip;
     private String gameVersion;
 
+    private VoxellaLauncher launcher;
     private GameRecord gameRecord;
     private AffiliateLink activeLink;
     private JTabbedPane tabbedPane;
@@ -89,8 +92,8 @@ public class TerasologyGameComponent extends JComponent {
 
         for (AffiliateLink link : AffiliateLink.values()) {
             affiliateImages.put(link, new ImageIcon(getClass().getResource("/" + RECOURCE_PREFIX + resourceBundle.getString("affiliateLink.icon_" + link.getCode()))).getImage());
-            affiliateToolTip.put(link, resourceBundle.getString("affiliateLink.toolTip_" + link.getCode()));
-            affiliateUrl.put(link, resourceBundle.getString("affiliateLink.link_" + link.getCode()));
+            affiliateToolTips.put(link, resourceBundle.getString("affiliateLink.toolTip_" + link.getCode()));
+            affiliateUrls.put(link, resourceBundle.getString("affiliateLink.link_" + link.getCode()));
         }
         headerUrl = resourceBundle.getString("header.link");
         headerToolTip = resourceBundle.getString("header.toolTip");
@@ -104,16 +107,28 @@ public class TerasologyGameComponent extends JComponent {
         });
         addMouseListener(new MouseAdapter() {
             @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    processPopupMenu(e);
+                    return;
+                }
+            }
+
+            @Override
             public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    processPopupMenu(e);
+                    return;
+                }
                 if (e.getButton() == MouseEvent.BUTTON1) {
                     int mouseX = e.getX();
                     int mouseY = e.getY();
 
                     AffiliateLink targetLink = getActiveAffiate(mouseX, mouseY);
                     if (targetLink != null) {
-                        BareBonesBrowserLaunch.openDesktopURL(affiliateUrl.get(targetLink));
+                        DesktopUtils.openDesktopURL(affiliateUrls.get(targetLink));
                     } else if (isInHeader(mouseX, mouseY)) {
-                        BareBonesBrowserLaunch.openDesktopURL(headerUrl);
+                        DesktopUtils.openDesktopURL(headerUrl);
                     }
                 }
             }
@@ -130,6 +145,22 @@ public class TerasologyGameComponent extends JComponent {
             @Override
             public void mouseEntered(MouseEvent e) {
                 processMousePosition(e);
+            }
+
+            private void processPopupMenu(MouseEvent e) {
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+                AffiliateLink targetLink = getActiveAffiate(mouseX, mouseY);
+                if (targetLink != null) {
+                    String affiliateUrl = affiliateUrls.get(targetLink);
+                    JPopupMenu popupMenu = launcher.createLinkPopupMenu(affiliateUrl);
+                    popupMenu.show(e.getComponent(), mouseX, mouseY);
+                    popupMenu.grabFocus();
+                } else if (isInHeader(mouseX, mouseY)) {
+                    JPopupMenu popupMenu = launcher.createLinkPopupMenu(headerUrl);
+                    popupMenu.show(e.getComponent(), mouseX, mouseY);
+                    popupMenu.grabFocus();
+                }
             }
         });
         addComponentListener(new ComponentAdapter() {
@@ -158,7 +189,7 @@ public class TerasologyGameComponent extends JComponent {
         }
         if (activeLink != null) {
             targetCursor = handCursor;
-            targetToolTip = affiliateToolTip.get(activeLink);
+            targetToolTip = affiliateToolTips.get(activeLink);
         } else if (isInHeader(mouseX, mouseY)) {
             targetCursor = handCursor;
             targetToolTip = headerToolTip;
@@ -198,7 +229,7 @@ public class TerasologyGameComponent extends JComponent {
         aboutText.setOpaque(false);
         aboutText.addHyperlinkListener((HyperlinkEvent e) -> {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+                DesktopUtils.openDesktopURL(e.getURL());
             }
         });
         JScrollPane aboutScrollPane = new JScrollPane() {
@@ -244,6 +275,10 @@ public class TerasologyGameComponent extends JComponent {
         tabbedPane.addTab(resourceBundle.getString("updatesTab.title"), updatesScrollPane);
         tabbedPane.invalidate();
         add(tabbedPane);
+    }
+
+    public void attachLauncher(VoxellaLauncher launcher) {
+        this.launcher = launcher;
     }
 
     public void setGameRecord(@Nullable GameRecord gameRecord) {

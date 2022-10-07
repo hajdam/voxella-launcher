@@ -18,7 +18,7 @@ package org.exbin.voxella.launcher.gui;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.event.HyperlinkEvent;
-import org.exbin.voxella.launcher.api.utils.BareBonesBrowserLaunch;
+import org.exbin.voxella.launcher.api.utils.DesktopUtils;
 
 /**
  * News panel.
@@ -38,7 +38,7 @@ public class NewsPanel extends javax.swing.JPanel {
     private void init() {
         editorPane.addHyperlinkListener((HyperlinkEvent e) -> {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+                DesktopUtils.openDesktopURL(e.getURL());
             }
         });
         editorPane.setContentType("text/html");

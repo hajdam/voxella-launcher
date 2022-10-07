@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JLabel;
 import javax.swing.event.HyperlinkEvent;
-import org.exbin.voxella.launcher.api.utils.BareBonesBrowserLaunch;
+import org.exbin.voxella.launcher.api.utils.DesktopUtils;
 import org.exbin.voxella.launcher.api.utils.UiUtils;
 
 /**
@@ -51,7 +51,7 @@ public class AboutPanel extends javax.swing.JPanel {
 
         resourcesEditorPane.addHyperlinkListener((HyperlinkEvent e) -> {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                BareBonesBrowserLaunch.openDesktopURL(e.getURL());
+                DesktopUtils.openDesktopURL(e.getURL());
             }
         });
     }
@@ -241,7 +241,7 @@ public class AboutPanel extends javax.swing.JPanel {
     private void appHomepageLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appHomepageLabelMouseClicked
         if (!evt.isPopupTrigger()) {
             String targetURL = ((JLabel) evt.getSource()).getText();
-            BareBonesBrowserLaunch.openDesktopURL(targetURL);
+            DesktopUtils.openDesktopURL(targetURL);
         }
     }//GEN-LAST:event_appHomepageLabelMouseClicked
 

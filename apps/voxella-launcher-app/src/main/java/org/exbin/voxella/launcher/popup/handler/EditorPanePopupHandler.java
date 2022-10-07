@@ -48,7 +48,7 @@ import org.exbin.voxella.launcher.popup.ImageActionsHandler;
 import org.exbin.voxella.launcher.popup.LinkActionsHandler;
 import org.exbin.voxella.launcher.popup.PositionImageActionsHandler;
 import org.exbin.voxella.launcher.popup.PositionLinkActionsHandler;
-import org.exbin.voxella.launcher.api.utils.BareBonesBrowserLaunch;
+import org.exbin.voxella.launcher.api.utils.DesktopUtils;
 import org.exbin.voxella.launcher.utils.ActionUtils;
 import org.exbin.voxella.launcher.utils.ClipboardActionsHandler;
 import org.exbin.voxella.launcher.utils.ClipboardActionsUpdateListener;
@@ -158,7 +158,7 @@ public class EditorPanePopupHandler implements ClipboardActionsHandler, LinkActi
     @Override
     public void performOpenLink() {
         String url = EditorPanePopupHandler.getLinkUrl(editorPane, editorPane.getCaretPosition());
-        BareBonesBrowserLaunch.openDesktopURL(url);
+        DesktopUtils.openDesktopURL(url);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class EditorPanePopupHandler implements ClipboardActionsHandler, LinkActi
     public void performOpenLink(Point locationOnScreen) {
         SwingUtilities.convertPointFromScreen(locationOnScreen, editorPane);
         String url = EditorPanePopupHandler.getLinkUrl(editorPane, locationOnScreen);
-        BareBonesBrowserLaunch.openDesktopURL(url);
+        DesktopUtils.openDesktopURL(url);
     }
 
     @Override

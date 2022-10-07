@@ -139,6 +139,7 @@ public class Main {
             TerasologyGameController gameController = new TerasologyGameController("Terasology-latest");
             ImageIcon terasologyGameIcon = new javax.swing.ImageIcon(launcher.getClass().getResource("/org/exbin/voxella/launcher/game/terasology/resources/gooey_star_48.png"));
             TerasologyGameComponent component = new TerasologyGameComponent();
+            component.attachLauncher(launcher);
             BasicGameRecord gameRecord = new BasicGameRecord("Terasology Test", gameController, component, terasologyGameIcon);
             gameRecord.setVersion(gameController.getEngineVersion());
             component.setGameRecord(gameRecord);

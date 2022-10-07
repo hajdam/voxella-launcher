@@ -15,20 +15,29 @@
  */
 package org.exbin.voxella.launcher;
 
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.AbstractAction;
+import javax.swing.JPopupMenu;
 import org.apache.commons.lang3.SystemUtils;
 import org.exbin.voxella.launcher.preferences.Preferences;
 import org.exbin.voxella.launcher.api.VoxellaLauncher;
+import org.exbin.voxella.launcher.api.utils.DesktopUtils;
+import org.exbin.voxella.launcher.popup.DefaultPopupMenu;
 import org.exbin.voxella.launcher.preferences.PropertiesPreferences;
+import org.exbin.voxella.launcher.utils.ActionUtils;
+import org.exbin.voxella.launcher.utils.ClipboardUtils;
 
 /**
  * Main launcher class.
@@ -71,6 +80,7 @@ public class MainLauncher implements VoxellaLauncher {
         }
     }
 
+    @Nonnull
     public static synchronized MainLauncher getInstance() {
         if (instance == null) {
             instance = new MainLauncher();
@@ -125,6 +135,37 @@ public class MainLauncher implements VoxellaLauncher {
     @Override
     public File getWorkDir() {
         return workDir;
+    }
+
+    @Nonnull
+    @Override
+    public JPopupMenu createLinkPopupMenu(final String uri) {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        DefaultPopupMenu defaultPopupMenu = DefaultPopupMenu.getInstance();
+        ResourceBundle resourceBundle = defaultPopupMenu.getResourceBundle();
+        Class<? extends DefaultPopupMenu> resourceClass = defaultPopupMenu.getClass();
+
+        AbstractAction openLinkAction = new AbstractAction(DefaultPopupMenu.POPUP_OPEN_LINK_ACTION_NAME) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DesktopUtils.openDesktopURL(uri);
+            }
+        };
+        ActionUtils.setupAction(openLinkAction, resourceBundle, resourceClass, DefaultPopupMenu.POPUP_OPEN_LINK_ACTION_ID);
+        popupMenu.add(openLinkAction);
+
+        AbstractAction copyLinkAction = new AbstractAction(DefaultPopupMenu.POPUP_COPY_LINK_ACTION_NAME) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringSelection stringSelection = new StringSelection(uri);
+                ClipboardUtils.getClipboard().setContents(stringSelection, stringSelection);
+            }
+        };
+        ActionUtils.setupAction(copyLinkAction, resourceBundle, resourceClass, DefaultPopupMenu.POPUP_COPY_LINK_ACTION_ID);
+        popupMenu.add(copyLinkAction);
+
+        return popupMenu;
     }
 
     @Nonnull
