@@ -162,7 +162,7 @@ class RunGameTask /*implements Runnable*/ {
     }
 
     private void updateMessage(String message) {
-        
+
     }
 
 //    private void declareSurvival() {

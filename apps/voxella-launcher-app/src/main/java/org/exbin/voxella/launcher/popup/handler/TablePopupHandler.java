@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,8 +26,7 @@ import org.exbin.voxella.launcher.utils.ClipboardUtils;
 /**
  * Popup handler for table.
  *
- * @version 0.2.1 2022/05/01
- * @author ExBin Project (http://exbin.org)
+ * @author Voxella Project
  */
 @ParametersAreNonnullByDefault
 public class TablePopupHandler implements ClipboardActionsHandler {
@@ -110,7 +109,7 @@ public class TablePopupHandler implements ClipboardActionsHandler {
 
     @Override
     public boolean canSelectAll() {
-        return tableComp.isEnabled() && tableComp.getSelectionModel().getSelectionMode() != ListSelectionModel.SINGLE_SELECTION;
+        return tableComp.isEnabled() && tableComp.getSelectionModel().getSelectionMode() != ListSelectionModel.SINGLE_SELECTION && (tableComp.getModel().getRowCount() > 0);
     }
 
     @Override

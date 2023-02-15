@@ -174,12 +174,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="homepageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="appHomepageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="appHomepageLabel" alignment="3" min="-2" pref="17" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="resourcesLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="resourcesScrollPane" pref="173" max="32767" attributes="0"/>
+                  <Component id="resourcesScrollPane" pref="157" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>

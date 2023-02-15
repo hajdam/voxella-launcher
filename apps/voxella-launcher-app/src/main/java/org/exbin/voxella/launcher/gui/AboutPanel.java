@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,14 +17,21 @@ package org.exbin.voxella.launcher.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.event.HyperlinkEvent;
 import org.exbin.voxella.launcher.api.utils.DesktopUtils;
 import org.exbin.voxella.launcher.api.utils.UiUtils;
+import org.exbin.voxella.launcher.popup.DefaultPopupMenu;
+import org.exbin.voxella.launcher.popup.LinkActionsHandler;
+import org.exbin.voxella.launcher.utils.ClipboardUtils;
 
 /**
  * About launcher panel.
@@ -227,11 +234,11 @@ public class AboutPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(homepageLabel)
-                    .addComponent(appHomepageLabel))
+                    .addComponent(appHomepageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(resourcesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resourcesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                .addComponent(resourcesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -239,7 +246,7 @@ public class AboutPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void appHomepageLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appHomepageLabelMouseClicked
-        if (!evt.isPopupTrigger()) {
+        if (evt.getButton() == MouseEvent.BUTTON1 && !evt.isPopupTrigger()) {
             String targetURL = ((JLabel) evt.getSource()).getText();
             DesktopUtils.openDesktopURL(targetURL);
         }
@@ -253,6 +260,37 @@ public class AboutPanel extends javax.swing.JPanel {
         vendorTextField.setText(aboutInfo.vendor);
         licenseTextField.setText(aboutInfo.license);
         appHomepageLabel.setText(aboutInfo.homepage);
+        appHomepageLabel.setComponentPopupMenu(new JPopupMenu() {
+            private boolean initialized = false;
+
+            @Override
+            public void show(Component invoker, int x, int y) {
+                if (!initialized) {
+                    DefaultPopupMenu.getInstance().appendLinkMenu(this, new LinkActionsHandler() {
+                        @Override
+                        public void performCopyLink() {
+                            String targetURL = appHomepageLabel.getText();
+                            StringSelection stringSelection = new StringSelection(targetURL);
+                            ClipboardUtils.getClipboard().setContents(stringSelection, stringSelection);
+                        }
+
+                        @Override
+                        public void performOpenLink() {
+                            String targetURL = appHomepageLabel.getText();
+                            DesktopUtils.openDesktopURL(targetURL);
+                        }
+
+                        @Override
+                        public boolean isLinkSelected() {
+                            return true;
+                        }
+                    });
+
+                    initialized = true;
+                }
+                super.show(invoker, x, y);
+            }
+        });
 
         if (aboutInfo.aboutImage != null) {
             JLabel imageLabel = new JLabel();

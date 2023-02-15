@@ -7,7 +7,7 @@ package org.exbin.voxella.launcher.game.terasology.util;
  * A simplified representation of a computer platform as `os` and `arch`
  */
 public final class Platform {
-    
+
     private static final Platform PLATFORM = new Platform();
 
     private String os;

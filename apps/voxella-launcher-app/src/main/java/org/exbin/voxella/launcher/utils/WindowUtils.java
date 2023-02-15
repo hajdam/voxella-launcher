@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +41,6 @@ import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.text.JTextComponent;
 import org.exbin.voxella.launcher.utils.handler.OkCancelService;
 
@@ -90,7 +89,8 @@ public class WindowUtils {
         final JDialog dialog = new JDialog(getWindow(parent), modalityType);
         Dimension size = component.getPreferredSize();
         dialog.add(component);
-        dialog.setSize(size.width + 8, size.height + 24);
+        dialog.getContentPane().setPreferredSize(new Dimension(size.width, size.height));
+        dialog.pack();
         dialog.setTitle(dialogTitle);
         if (component instanceof OkCancelService) {
             assignGlobalKeyListener(dialog, ((OkCancelService) component).getOkCancelListener());
@@ -148,7 +148,8 @@ public class WindowUtils {
         JDialog dialog = new JDialog();
         Dimension size = component.getPreferredSize();
         dialog.add(component);
-        dialog.setSize(size.width + 8, size.height + 24);
+        dialog.getContentPane().setPreferredSize(new Dimension(size.width, size.height));
+        dialog.pack();
         if (component instanceof OkCancelService) {
             assignGlobalKeyListener(dialog, ((OkCancelService) component).getOkCancelListener());
         }
@@ -306,7 +307,8 @@ public class WindowUtils {
         dialogPanel.add(controlPanel, BorderLayout.SOUTH);
         Dimension mainPreferredSize = mainPanel.getPreferredSize();
         Dimension controlPreferredSize = controlPanel.getPreferredSize();
-        dialogPanel.setPreferredSize(new Dimension(mainPreferredSize.width, mainPreferredSize.height + controlPreferredSize.height));
+        int height = mainPreferredSize.height + (controlPreferredSize != null ? controlPreferredSize.height : 0);
+        dialogPanel.setPreferredSize(new Dimension(mainPreferredSize.width, height));
         return dialogPanel;
     }
 
