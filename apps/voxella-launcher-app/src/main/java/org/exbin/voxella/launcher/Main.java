@@ -361,6 +361,7 @@ public class Main {
         }
     }
 
+    @ParametersAreNonnullByDefault
     private static class CancellableProgressListener implements ProgressListener {
 
         private boolean cancelled = false;
