@@ -21,7 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JButton;
 import org.exbin.voxella.launcher.utils.handler.DefaultControlHandler;
 import org.exbin.voxella.launcher.utils.OkCancelListener;
-import org.exbin.voxella.launcher.utils.WindowUtils;
+import org.exbin.voxella.launcher.utils.UiUtils;
 
 /**
  * Basic default control panel.
@@ -127,7 +127,7 @@ public class DefaultControlPanel extends javax.swing.JPanel implements DefaultCo
 
     @Override
     public void performClick(DefaultControlHandler.ControlActionType actionType) {
-        WindowUtils.doButtonClick(actionType == DefaultControlHandler.ControlActionType.OK ? okButton : cancelButton);
+        UiUtils.doButtonClick(actionType == DefaultControlHandler.ControlActionType.OK ? okButton : cancelButton);
     }
 
     @Nonnull

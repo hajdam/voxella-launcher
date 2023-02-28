@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.swing.JButton;
 import org.exbin.voxella.launcher.utils.OkCancelListener;
-import org.exbin.voxella.launcher.utils.WindowUtils;
+import org.exbin.voxella.launcher.utils.UiUtils;
 import org.exbin.voxella.launcher.utils.handler.CloseControlHandler;
 
 /**
@@ -108,7 +108,7 @@ public class CloseControlPanel extends javax.swing.JPanel implements CloseContro
 
     @Override
     public void performCloseClick() {
-        WindowUtils.doButtonClick(closeButton);
+        UiUtils.doButtonClick(closeButton);
     }
 
     @Nonnull
