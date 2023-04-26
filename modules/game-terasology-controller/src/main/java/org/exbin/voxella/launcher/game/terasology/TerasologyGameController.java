@@ -79,7 +79,7 @@ public class TerasologyGameController implements GameController {
     }
 
     public void performUpdate() {
-
+        
     }
 
     public void performDownload() throws DownloadException {

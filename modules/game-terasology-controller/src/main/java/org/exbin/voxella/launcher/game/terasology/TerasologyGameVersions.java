@@ -15,9 +15,14 @@
  */
 package org.exbin.voxella.launcher.game.terasology;
 
+import com.vdurmont.semver4j.Semver;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -28,54 +33,30 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class TerasologyGameVersions {
 
-    private final List<GameVersion> gameVersion = new ArrayList<>();
+    private final List<TerasologyGameVersion> gameVersion = new ArrayList<>();
 
     public TerasologyGameVersions() {
     }
 
-    public List<GameVersion> getGameVersion() {
+    @Nonnull
+    public List<TerasologyGameVersion> getGameVersion() {
         return gameVersion;
     }
 
     public void loadFromFile(File versionsFile) {
-
+        try {
+            gameVersion.clear();
+            Stream<String> lines = Files.lines(versionsFile.toPath());
+            lines.forEach((t) -> {
+                Semver version = new Semver(t, Semver.SemverType.IVY);
+                gameVersion.add(new TerasologyGameVersion(TerasologyGameVersion.Variant.RELEASE, version));
+            });
+        } catch (IOException ex) {
+            
+        }
     }
 
     public void saveToFile(File versionsFile) {
-
-    }
-
-    public static class GameVersion {
-
-        private Variant variant;
-        /**
-         * TODO: Separate to numbers.
-         */
-        private String version;
-
-        public Variant getVariant() {
-            return variant;
-        }
-
-        public void setVariant(Variant variant) {
-            this.variant = variant;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public void setVersion(String version) {
-            this.version = version;
-        }
-    }
-
-    public enum Variant {
-        RELEASE,
-        ALPHA,
-        /**
-         * Release candidate.
-         */
-        RC
+        
     }
 }

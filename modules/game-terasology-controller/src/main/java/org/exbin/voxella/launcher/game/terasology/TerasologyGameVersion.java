@@ -15,22 +15,44 @@
  */
 package org.exbin.voxella.launcher.game.terasology;
 
+import com.vdurmont.semver4j.Semver;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.concurrent.Immutable;
 
 /**
- * Terasology game preferences.
+ * Terasology game versions.
  *
  * @author Voxella Project
  */
 @ParametersAreNonnullByDefault
-public class TerasologyGamePreferences {
+@Immutable
+public class TerasologyGameVersion {
 
-    private TerasologyGameVersion gameVersion;
-    private String javaPath;
-    private JavaHeapSize initMemory;
-    private JavaHeapSize maximumMemory;
+    private final Variant variant;
+    private final Semver version;
 
-    public TerasologyGamePreferences() {
+    public TerasologyGameVersion(Variant variant, Semver version) {
+        this.variant = variant;
+        this.version = version;
     }
 
+    @Nonnull
+    public Variant getVariant() {
+        return variant;
+    }
+
+    @Nonnull
+    public Semver getVersion() {
+        return version;
+    }
+
+    public enum Variant {
+        RELEASE,
+        ALPHA,
+        /**
+         * Release candidate.
+         */
+        RC
+    }
 }
