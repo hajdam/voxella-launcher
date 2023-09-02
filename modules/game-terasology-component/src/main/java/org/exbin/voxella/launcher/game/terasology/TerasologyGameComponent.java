@@ -220,6 +220,11 @@ public class TerasologyGameComponent extends JComponent {
             public void paint(Graphics g) {
                 super.paint(getWrapperGraphics(g, this));
             }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
+            }
         };
 
         aboutText.setEditorKit(JEditorPane.createEditorKitForContentType(""));
@@ -237,11 +242,21 @@ public class TerasologyGameComponent extends JComponent {
             public void paint(Graphics g) {
                 super.paint(getWrapperGraphics(g, this));
             }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
+            }
         };
         JViewport aboutViewport = new JViewport() {
             @Override
             public void paint(Graphics g) {
                 super.paint(getWrapperGraphics(g, this));
+            }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
             }
         };
         aboutViewport.setView(aboutText);
@@ -254,19 +269,35 @@ public class TerasologyGameComponent extends JComponent {
             public void paint(Graphics g) {
                 super.paint(getWrapperGraphics(g, this));
             }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
+            }
         };
         updatesText.setText("TODO");
         updatesText.setEditable(false);
+        updatesText.setOpaque(false);
         JScrollPane updatesScrollPane = new JScrollPane() {
             @Override
             public void paint(Graphics g) {
                 super.paint(getWrapperGraphics(g, this));
+            }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
             }
         };
         JViewport updatesViewport = new JViewport() {
             @Override
             public void paint(Graphics g) {
                 super.paint(getWrapperGraphics(g, this));
+            }
+
+            @Override
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
             }
         };
         updatesViewport.setView(updatesText);
@@ -373,16 +404,16 @@ public class TerasologyGameComponent extends JComponent {
         return posX > 10 && posX < logoImageSize.width + 10 && posY > 10 && posY < logoImageSize.height + 10;
     }
 
-    private static Graphics2DWrapper createGraphicsWrapper(Graphics g) {
-        if (g instanceof Graphics2DWrapper) {
-            return (Graphics2DWrapper) g;
+    private static TransparencyGraphicsWrapper createGraphicsWrapper(Graphics g) {
+        if (g instanceof TransparencyGraphicsWrapper) {
+            return (TransparencyGraphicsWrapper) g;
         }
-        return new Graphics2DWrapper((Graphics2D) g, UiUtils.isDarkUI() ? 196 : 159);
+        return new TransparencyGraphicsWrapper((Graphics2D) g, UiUtils.isDarkUI() ? 196 : 159);
     }
 
     @Nonnull
     private Graphics getWrapperGraphics(Graphics g, JComponent component) {
-        if (g instanceof Graphics2DWrapper) {
+        if (g instanceof TransparencyGraphicsWrapper) {
             return g;
         }
 
